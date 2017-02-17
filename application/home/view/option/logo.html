@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 修改LOGO</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6 col-md-offset-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>修改LOGO</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="logo" action="{:url('home/option/logo')}" method="post" enctype="multipart/form-data">
+                          <div class="form-group">
+                                <label class="col-sm-3 control-label">LOGO *：</label>
+                                <div class="col-sm-6">
+                                    <input id="images" name="images" class="form-control" type="text">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>配图</span>
+                                    <div class="shade" onclick="javascript:closeShade()">
+                                        <div class="">
+                                            <span class="text_span"></span>
+                                        </div>
+                                    </div>
+                                    <div class="shadeImg" onclick="javascript:closeShadeImg()">
+                                        <div class="">
+                                            <img class="showImg" src="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="btn btn-primary" id="dropz"><span class="fa fa-upload"></span>上传文件</div>
+                                </div>
+                                <div class="col-sm-8 col-md-offset-3">
+                                    <div class="img_div">
+                                        <div class='isImg'><img src='__INDEX__images/logo.png' id="newimage" onclick='javascript:lookBigImg(this)' style='height: 120px; width: 240px;' /><button class='removeBtn' onclick='javascript:removeImg(this)'>x</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary " type="submit"><span id="s">提交</span></button>
+                                    <button  class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/option/list')}'">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- jQuery Validation plugin javascript-->
+    <script src="__HOME__js/dropzone.min.js"></script>
+<script type="text/javascript">
+        $('#dropz').dropzone({
+            url: "{:url('home/option/uplogo')}",
+            params:{"f_type":"article"},
+            paramName:'images',//相当于元素的name属性，默认为file。
+            maxFiles: {:config('upload.count')},//最多接收的上传文件为
+            maxFilesize: {:config('upload.size')},//最大上传文件的大小单位是mb
+            addRemoveLinks:true,//是否给文件添加一个删除链接
+            dictRemoveFile:'删除',//移动文件连接的文本
+            autoDiscover:false,
+            //createImageThumbnails:false,
+            previewTemplate:'<div id="preview-template" style="display: none;"></div>',
+            //acceptedFiles: ".gif,.jpg,.png,.pdf,.doc,.xls,.ppt,.docx,.xlsx,.pptx",//允许上传文件的类型
+            acceptedFiles: ".gif,.jpg,.png",
+            init: function() {
+                this.on("success", function(file,response) {
+                    if(response.status == 1){
+                        console.log(response.url);
+                        $("#images").val(response.url);
+                        $("#newimage").attr('src',response.url);
+                        img_html = "<div class='isImg'><img src='" + response.url + "' onclick='javascript:lookBigImg(this)' style='height: 120px; width: 240px;' /><button class='removeBtn' onclick='javascript:removeImg(this)'>x</button></div>";
+                        $(".img_div").find('div').remove();
+                        $(".img_div").append(img_html);
+                        console.log("File: " + file.name + " uploaded,Detail: " + response);
+                    }
+                });
+                this.on("removedfile", function(file) {
+                    console.log("File " + file.name + "removed");
+                });
+            }
+	   });
+        $("#sub").click(function(){
+            //取得内容
+            var data = {
+                'images'  : $('#images').val()
+            }
+            $.post("{:url('home/option/logo')}",data,function(msg){
+                if(msg.status == 1){
+                    swal({
+                        title: "恭喜更新logo成功!",
+                        text: "即将跳转到列表页面",
+                        type: "success"
+                    },function(){
+                        //window.location.href="http://"+window.location.host+"{:url('index/index/index')}";
+                        window.location.reload();
+                    });
+                }else if(msg.status ==2){
+                        swal({
+                        title: "您好像没有进更换logo",
+                        text: "看来您还是一个念旧的人",
+                        type: "success"
+                        });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "更新失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+            },'json');
+            return false;
+        });
+        function removeImg(r) {
+            $(r).parent().remove();
+            $("#images").val('');
+        }
+
+        function lookBigImg(b) {
+            $(".shadeImg").fadeIn(500);
+            $(".showImg").attr("src", $(b).attr("src"))
+        }
+
+        function closeShade() {
+            $(".shade").fadeOut(500);
+        }
+
+        function closeShadeImg() {
+            $(".shadeImg").fadeOut(500);
+        } 
+    </script>
+
+</body>
+
+</html>

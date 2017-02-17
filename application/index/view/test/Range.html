@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh">
+        <meta charset="utf-8">
+        <title>Rang元素的使用</title>
+        <style>
+            #div{
+                background-color: bisque;
+                width: 300px;
+                height: 150px;
+                text-align: center;
+            }
+            #myDiv{
+                color: red;
+            }
+            #new{
+                background-color: antiquewhite;
+                width: 300px;
+                height: 50px;
+            }
+            #old{
+                background-color: burlywood;
+                width: 300px;
+                height: 50px;
+            }
+            #move{
+                background-color: bisque;
+                width: 300px;
+                height: 50px;
+            }
+        </style>
+        <script type="text/javascript">
+            //创建rangeObj 对象
+            var rangeObj = document.createRange();
+            //获取选中的内容
+            function rangTest(){
+                var html='';
+                showRangeDiv = document.getElementById('showRange');
+                //获取选中的对象
+                selection = document.getSelection();
+                //目前只有firefox支持多选
+                if(selection.rangeCount > 0){
+                    for(var i=0;i<selection.rangeCount;i++){
+                        //选中的区域有几个
+                        var range = selection.getRangeAt(i);
+                        html += "您选取了第"+(i+1)+"块内容,内容如下:"+range+'<br/>';
+                    }
+                    showRangeDiv.innerHTML = html;
+                }
+            }
+            //range对象删除操作
+            function delRangeContent(onlyContent){
+                var div = document.getElementById('div');
+                if(onlyContent){
+                    //选中要被对象的内容
+                    rangeObj.selectNodeContents(div);
+                    //删除选中对象的内容
+                    rangeObj.deleteContents();
+                }else{
+                    //找到对象节点
+                    rangeObj.selectNode(div);
+                    //删除节点
+                    rangeObj.deleteContents();
+                }
+            }
+            //删除指定长度
+            function delChar(){
+                var div = document.getElementById('myDiv');
+                //获取div的节点
+                var textNode = div.firstChild;
+                console.log(textNode);
+                //设置起始与结束位置
+                rangeObj.setStart(textNode,2);
+                rangeObj.setEnd(textNode,5);
+                //执行删除操作
+                rangeObj.deleteContents();
+            }
+            //删除节点
+            function delTable(){
+                var table = document.getElementById('myTable');
+                //判断行数
+                if(table.rows.length >0){
+                    //取得table当中的一个row
+                    var row = table.rows[0];
+                    console.log(table.rows.length);
+                    //设置节点的开始与结束位置
+                    rangeObj.setStartBefore(row);
+                    rangeObj.setEndAfter(row);
+                    //rangeObj.setStartAfter(row);
+                    //rangeObj.setEndBefore(row);
+                    rangeObj.deleteContents();
+                }
+            }
+            //克隆文本
+            function cloneRange(){
+                //获取P的内容 相当于选中方法
+                rangeObj.selectNodeContents(document.getElementById('myP'));
+                //这个 cloneRange方法是 range提供的不是我们 在这里写的这个cloneRange方法
+                var rangeClone = rangeObj.cloneRange();
+                //转换成string 然后弹出
+                alert(rangeClone.toString());
+            }
+            //克隆节点
+            function cloneContent(){
+                var div = document.getElementById('rDiv');
+                rangeObj.selectNodeContents(div);
+                //复制节点 得到一个新的节点
+                var docClone = rangeObj.cloneContents();
+                div.appendChild(docClone);
+            }
+            //移动内容
+            function moveContent(){
+                var newDiv = document.getElementById('new');
+                var oldDiv = document.getElementById('old');
+                //获取第一个div中的内容
+                rangeObj.selectNodeContents(newDiv);
+                var docClone = rangeObj.extractContents();
+                oldDiv.appendChild(docClone);
+            }
+            //选择元素
+            function selectRangeContents(){
+                var div = document.getElementById('move');
+                rangeObj.selectNode(div);
+                //在使用完range对象的时候 在不之后最好是释放出来
+                //rangeObj.detach();
+            }
+            //取消选取
+            function unSelect(){
+                rangeObj.collapse(false);
+            }
+            //显示
+            function showRange(){
+                alert(rangeObj.toString());
+            }
+            //移动按钮
+            function moveButton(){
+                var btn = document.getElementById('myBtn');
+                var selection = document.getSelection();
+                if(selection.rangeCount>0){
+                    var range = selection.getRangeAt(0);
+                    range.insertNode(btn);
+                }
+            }
+            //比较位置
+            function comparePlace(){
+                var blodText = document.getElementById('blodTest');
+                rangeObj.selectNodeContents(blodText.firstChild);
+                var selection = document.getSelection();
+                if(selection.rangeCount>0){
+                    var selRange = selection.getRangeAt(0);
+                    if(selRange.compareBoundaryPoints(Range.START_TO_END,rangeObj) <= 0){
+                        alert("您选取的文字的在粗体的前面");
+                    }else{
+                        if(selRange.compareBoundaryPoints(Range.END_TO_START,rangeObj) >= 0){
+                            alert("您选取的文字的在粗体的后面,后面");
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <h2>Selection对象与Range对象的使用</h2>
+        <input type="button" value="选中" onclick="rangTest()">
+        <div id="showRange"></div>
+        <hr>
+        <h2>Range对象删除操作</h2>
+        <div id="div">
+            元素的内容
+        </div>
+        <button onclick="delRangeContent(true)">删除内容</button>
+        <button onclick="delRangeContent(false)">删除元素</button>
+        <hr>
+        <h2>Range删除指定长度</h2>
+        <div id="myDiv">这是一段非常长的文字，里面有很多东西是可以删除的，那么我来试试如何删除</div>
+        <button onclick="delChar()">删指定长度的文字</button>(第2个文字到第5个文字删除)
+        <hr>
+        <h2>Range对象删除节点</h2>
+        <table id="myTable" border="1" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>内容1</td>
+                <td>内容2</td>
+            </tr>
+            <tr>
+                <td>内容3</td>
+                <td>内容4</td>
+            </tr>
+            <tr>
+                <td>内容5</td>
+                <td>内容6</td>
+            </tr>
+            <tr>
+                <td>内容7</td>
+                <td>内容8</td>
+            </tr>
+            <tr>
+                <td>内容9</td>
+                <td>内容10</td>
+            </tr>
+        </table>
+        <button onclick="delTable()">删除表格的第一行</button>
+        <hr>
+        <h2>Range的克隆内容</h2>
+        <p id="myP">这里就随便写了一些东西，你们自己看着办吧</p>
+        <button onclick="cloneRange()">我要复制或是克隆</button>
+        <hr>
+        <h2>Range的克隆节点</h2>
+        <div id="rDiv">
+            你来复制我吧
+            <br/>
+        </div>
+        <button onclick="cloneContent()">我要复制或是克隆</button>
+        <hr>
+        <h2>Range克隆到另外一个区块内容</h2>
+        <div id="new">你好嘛？</div>
+        <div id="old">我非常好!</div>
+        <button onclick="moveContent()">移动元素</button>
+        <hr>
+        <h2>Range 内容的选中与取消</h2>
+        <div id="move">我是内容，你看看嘛我就是内容的嘛!</div>
+        <button onclick="selectRangeContents()">选择元素</button>
+        <button onclick="unSelect()">取消元素</button>
+        <button onclick="showRange()">显示Range的内容</button>
+        <hr>
+        <h2>元素的插入</h2>
+        <div onmouseup="moveButton()" style="background-color:bisque;width:400px;height:50px;">我在这里随便写了一些内容，主要是为测试移动button按钮的位置</div>
+        <button id="myBtn">我是按钮</button>
+        <hr>
+        <h2>关于位置的比较</h2>
+        <p>我自己没事瞎写的一些内容，就只是用来测试的，<b id="blodTest">我是BIG体</b>你可以选择看一下，或是选择多看两下.</p>
+        <br/>
+        <button onclick="comparePlace()">比较位置</button>
+    </body>
+</html>

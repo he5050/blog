@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 小纸条列表</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H+">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico"> <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <a class="text-info" title="点击我刷新"><h5>小纸条列表</h5><i class="fa fa-refresh fa-spin"></i></a>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项 01</a>
+                                    </li>
+                                    <li><a href="#">选项 02</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                          <button class="btn btn-lg btn-primary" type="button" onclick="window.location.href='{:url('home/twitter/add')}'" >
+                                            添加纸条
+                                        </button>
+                                   <div class="input-group">
+                                    <input type="text" placeholder="查找分类" name="info" class="form-control input-lg" id="filter">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-lg btn-primary" type="submit">
+                                            搜索
+                                        </button>
+                                    </div>
+                            </div>
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-filter="#filter">
+                                <thead>
+                                <tr>
+                                   
+                                    <th data-toggle="true">序号</th>
+                                    <th>发表人</th>
+                                    <th>内容</th>
+                                    <th>图片</th>
+                                    <th>发表时间</th>
+                                    <th>状态(0删除,1正常)</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="twitter" id="tw"}
+                                <tr id="_{$tw.tw_id}">
+                                    <td>{$i}</td>
+                                    <td>{$tw.tw_uid}</td>
+                                    <td>{$tw.tw_content}</td>
+                                    <td>{$tw.tw_img}</td>
+                                    <td>{$tw.tw_createtime}</td>
+                                    <td id="ison">{$tw.tw_status}</td>
+                                    <td>
+                                        {if condition="$tw.tw_status eq '正常' "}
+                                        <a href="{:url('home/twitter/edit',['id'=>$tw.tw_id])}"><i class="fa fa-edit text-navy">修改</i></a>&nbsp;&nbsp;
+                                        <a href="javascript:removeinfo({$tw.tw_id});"><i class="fa fa-trash-o text-danger">删除</i></a>&nbsp;&nbsp;
+                                        <i class="fa fa-unlock text-info"><s>恢复</s></i> &nbsp;&nbsp;
+                                        {else/}
+                                        <i class="fa fa-edit text-navy"><s>修改</s></i> &nbsp;&nbsp;
+                                        <i class="fa fa-trash-o text-danger"><s>删除</s></i> &nbsp;&nbsp;
+                                        <a href="javascript:unlockinfo({$tw.tw_id});"><i class="fa fa-unlock text-info">恢复</i></a>&nbsp;&nbsp;
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+    <script src="__HOME__js/plugins/footable/footable.all.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/layer/layer.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+        function removeinfo(id){
+            layer.confirm('您确定要删除这条信息吗？',{
+                    btn:['确定','取消']
+                },function(){            
+                    $.post("{:url('home/twitter/del')}",{'id':id},function(msg){
+                        //console.log(data.status);
+                       if(msg.status == 1){
+                           layer.msg(msg.msg,{icon:1});
+                           $('#_'+id).empty();
+                       }else{
+                           layer.msg(data.msg,{icon:2});
+                       }
+                    },'json');
+                },function(){}
+            );
+        }
+        function unlockinfo(id){
+            layer.confirm('您确定要恢复这条信息吗？',{
+                    btn:['确定','取消']
+                },function(){            
+                    $.post("{:url('home/twitter/unlock')}",{'id':id},function(msg){
+                       if(msg.status == 1){
+                           layer.msg(msg.msg,{icon:1});
+                           var edit = $('#_'+id).find('.text-navy');
+                           edit.html('修改');
+                           edit.wrap("<a href='tedit/id/"+id+"'></a>");
+                           //删除
+                           var del = $('#_'+id).find('.text-danger');
+                           del.html('删除');
+                           del.wrap("<a href='javascript:removeinfo("+id+");'></a>");
+                           //恢复
+                           var unlock = $('#_'+id).find('.text-info');
+                           unlock.html('<s>恢复</s>');
+                           unlock.parent().replaceWith("<i class='fa fa-unlock text-info'><s>恢复</s></i> &nbsp;&nbsp;");
+                           //状态
+                        $('#_' + id).find('#ison').text('禁用');
+                       }else{
+                           layer.msg(data.msg,{icon:2});
+                       }
+                    },'json');
+                },function(){}
+            );
+        }
+    </script>
+</body>
+
+</html>

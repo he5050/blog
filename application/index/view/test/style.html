@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head lang="zh">
+		<meta charset="UTF-8">
+		<title>样式显示</title>
+		<style type="text/css">
+			.main1{
+				margin: 10px auto;
+				width: 85%;
+				height: auto;
+			}
+			.main2{
+				margin: 10px auto;
+				width: 85%;
+				height: auto;
+				clear: left;
+			}
+			.main3{
+				margin: 10px auto;
+				width: 80%;
+				height: auto;
+				text-align: center;
+				vertical-align: middle; 
+			}
+			.main4{
+				margin: 10px auto;
+				width: 70%;
+				height: auto;
+				column-count: 4; /*列数*/
+				column-rule: 5px outset #FFFFAA;
+				background-color: #AFAFAF;
+			}
+			.main5,.main6{
+				margin: 10px auto;
+				width: 70%;
+				height: auto;
+			}
+			.image{
+				border: 1px solid darkgray;
+				width: auto;
+				height: auto;
+				float: left;
+				text-align: center;
+				margin: 5px;
+			}
+			img{
+				margin: 5px;
+			}
+			.text{
+				font-size: 12px;
+				margin-bottom: 5px;
+			}
+			.main2 p{
+				cursor:context-menu;
+			}
+			.main2 li{
+				display: inline;
+			}
+			.main3 div{
+				margin-top: 5px;
+				width: 100px;
+				height: 100px;
+				background-color: #356635;
+			}
+			/*移动*/
+			.main3 .div02{
+				transform: translate(200px,100px);
+				-webkit-transform: translate(200px,100px);/*safari chrome*/
+				-ms-transform: translate(200px,100px); /*ie*/
+				-o-transfor:translate(200px,100px);/*opera*/
+				-moz-transform: translate(200px,100px);/*firefox*/
+			}
+			/*旋转 顺时针旋转 */
+			.main3 .div01{
+				transform: rotate(75deg);
+			}
+			/*缩放 分类 x与y 两个方向的缩放*/
+			.main3 .div03{
+				transform: scale(0.5,0.5);
+			}
+			/*拉伸 倾斜*/
+			.main3 .div04{
+				transform: skew(50deg,50deg);
+			}
+			/*动画旋转*/
+			.main5 .div06{
+				margin-top: 150px;
+				margin-left: 150px;
+				background-color: dodgerblue;
+				width: 100px;
+				height: 100px;
+				transition: width 2s,height 2s,transform 2s;/*动画时间2秒*/
+				transition-delay: 2s;/*延迟执行*/
+			}
+			.main5 .div06:hover{
+				width: 200px;
+				height: 200px;
+				transform: rotate(360deg);/*360度的旋转*/
+			}
+			.main6 .div07{
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				animation: anim 5s;
+			}
+			@keyframes anim{
+				0%{
+					background-color: red;
+					left: 100px;
+					top: 100px;
+				}
+				25%{
+					background-color: blue;
+					left: 200px;
+					top:100px;
+				50%{
+					background-color:firebrick ;
+					left: 200px;
+					top:200px;
+				}
+				75%{
+					background-color: #0075B0;
+					left: 100px;
+					top:200px
+				}
+				100%{
+					background-color: #030303;
+					left: 100px;
+					top:100px;
+				}
+			}
+		</style>
+		<script type="text/javascript">
+			function add(){
+				var imgDiv = document.getElementsByTagName("div")[1];
+				//复制节点
+				var newDiv = imgDiv.cloneNode(true);
+				//添加
+				document.getElementsByTagName('div')[0].appendChild(newDiv);
+			}
+		</script>
+	</head>
+	<body>
+		<div class="main1">
+			<button  onclick="add()">添加图片</button>
+			<hr />
+			<div class="image" id="imgdiv">
+				<a href="javascript:;" target="_self">
+					<img src="/static/images/1.jpg"/ width="150px" height="150px;">
+				</a>
+				<div class="text">
+					我是这个图片的介绍
+				</div>
+			</div>
+		</div>
+		<div class="main2">
+			行高属性<hr />
+			<p>
+				this is my web page this is my web page
+				this is my web page this is my web page
+				this is my web page this is my web page
+				this is my web page this is my web page
+				this is my web page this is my web page
+			</p>
+			display属性<hr />
+			<ul>
+				<li>hello</li>
+				<li>hello</li>
+				<li>hello</li>
+				<li>hello</li>
+			</ul>
+		</div>
+		<div class="main3">
+			移动<hr />
+			<div class="div01">
+				我是div1 我旋转了
+			</div>
+			<div class="div02">
+				我是div2 我移动了
+			</div>
+			<div class="div03">
+				我是div3 我缩放了
+			</div>
+			<div class="div04">
+				我是div04 我被拉伸倾斜了
+			</div>
+		</div>
+		<div class="main4">
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+			大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!大家好，我要写很多内容，用于测试分列功能!
+		</div>
+		<div class="main5">
+			<div class="div06">
+				我要开始实现动画效果
+			</div>
+		</div>
+		<div class="main6">
+			<div class="div07">
+				我是一个动画
+			</div>
+		</div>
+	</body>
+</html>

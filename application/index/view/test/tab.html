@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>选项卡</title>
+    <link rel="stylesheet" href="__INDEX__test/docs.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="__INDEX__test/bootstrap/css/bootstrap.min.css">
+</head>
+
+<body>
+    <h1 class="text-center">我是选项卡</h1>
+
+
+    <ul class="nav nav-tabs" id="myTab">
+<!--        <li class="active"><a href="#home">首页</a></li>-->
+  <!--      <li><a href="#profile">档案</a></li>-->
+<!--        <li><a href="#messages">信息</a></li>-->
+<!--        <li><a href="#settings">设置</a></li>-->
+<!--  主要是用于显示选项目名称与对应内容的锚点-->
+   {volist name="cates" id="vo1"}
+        <li class="<?php if($i == 1)echo 'active';?>"><a href="#{$vo1.id}">{$vo1.c_name}</a></li>
+   {/volist}
+    </ul>
+
+    <div class="tab-content">
+<!--      循环输出每一个分类-->
+       {volist name="cates" id="vo2"}
+               <div class="tab-pane <?php if($i == 1)echo 'active';?>" id="{$vo2.id}">
+                <ul>
+                   <!--           循环输出每个分类中文章的记录数-->
+                    {volist name="artis" id="vo"}
+<!--                       判断 当前文章的所在分类是否等于当前所在分类 如果在则输出数据 否则不输出数据-->
+                        {if condition="$vo2.id eq $vo.cate_id"}
+                            <li>{$vo.ac_title}</li>
+                        {/if}
+                    {/volist}
+                </ul>
+        </div>
+       {/volist}
+    </div>
+
+
+    <script src="__INDEX__test/jquery.min.js"></script>
+    <script src="__INDEX__test/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        //设置默认
+        $(function () {
+            //$('#myTab a:last').tab('show');
+            $('#myTab a:frist').tab('show');
+        })
+        //设置事件点击显示事件
+        $('#myTab a').mouseover(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        })
+        $('#myTab a').click(function (e) {
+            var id = 1;
+            id = $(this).attr('href').replace('#','');
+            var url = 'c/id/'+id+'.html';
+            window.location.href = url;
+        })
+    </script>
+</body>
+
+</html>

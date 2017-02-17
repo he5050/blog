@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>H+- 登录</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H+">
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/login.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <script type="text/javascript" src="http://tool.keleyi.com/ip/visitoriphost/"></script> 
+    {js href="__HOME__js/jquery-311.js" /}
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>[ H+ ]</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎使用 <strong>H+ 后台</strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势三</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>
+                    </ul>
+                    <strong>还没有账号？ <a href="{:url('index/index/reg')}">立即注册&raquo;</a></strong>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form method="post" action="{:url('home/login/logincheck')}" id="login">
+                    <h4 class="no-margins">登录：</h4>
+                    <p class="m-t-md">登录到H+后台</p>
+                    <input name="uname" type="text" class="form-control uname" placeholder="用户名" autocomplete="off" />
+                    <input name="upsw" type="password" class="form-control pword m-b" placeholder="密码" />
+                    <input name="ucaptcha" type="text" class="form-control captcha" placeholder="验证码" autocomplete="off" />
+                    <input type="hidden" name="ip" id="ip"/>
+                    <div class="cap">
+                       {:captcha_img()}
+                    </div>
+                    <span id="keleyivisitorip" class="relip"></span>
+                    <!--验证码-->
+                    <a class="" href="">忘记密码了？</a>
+                    <button class="btn btn-success btn-block">登录</button>
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                {:config('web.sitecopyrigth')}
+            </div>
+        </div>
+    </div>
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script src="__HOME__js/content.js"></script>
+    <script type="text/javascript">
+        $(function () {
+             $('.cap').on('click', function () {
+                //更换验证码
+                $(this).find('img').attr('src', '/captcha.html?r=' + new Date().getTime());
+            });
+            $('#keleyivisitorip').hide();
+        });
+       $('.captcha').focusout(function(){
+           var ip = $('.relip').html();
+            $('#ip').val(ip);
+        });
+        (function(){
+          var options = {success : showInfo};
+          $('#login').ajaxForm(options);
+          function showInfo(msg){
+              $('.btn-block').attr('disabled',true);
+             if(msg.status == 1){
+                    swal({
+                        title: "恭喜登录成功!",
+                        text: "您成功登录了后台,即将跳转到后台首页",
+                        type: "success"
+                    },function(){
+                        //跳转到
+                        refresh();
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: msg.msg,
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "登录失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },function(){
+                       refresh();
+                   });
+                    $('.btn-block').attr('disabled',false);
+                }
+          }  
+      })();
+    </script>
+</body>
+
+</html>

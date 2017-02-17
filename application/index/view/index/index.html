@@ -1,0 +1,82 @@
+{extend name="layout" /} {block name="content"}
+<div class="content" id="article">
+    <div class="content_top content_index_top">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content ">
+                <div class="carousel slide" id="carousel2">
+                    <ol class="carousel-indicators">
+                        {volist name="jds" id="jd"}
+                        <li data-slide-to="{$i-1}" data-target="#carousel2" class="<?php if($i==1){echo 'active';}?>"></li>
+                        {/volist}
+                    </ol>
+                    <div class="carousel-inner">
+                        {volist name="jds" id="j"}
+                        <div class="item <?php if($i==1){echo 'active';}?>">
+                            <img alt="{$j.jd_content}" class="img-responsive" lay-src="{$j.jd_img|default='static/images/1.jpg'}" usemap="#{$i}">
+                            <map name="#{$i}">
+                              <area shape="rect" coords="100,0,700,340" href="{$j.jd_url|default='javascript:;'}" target="_blank">
+                            </map>
+                            <div class="carousel-caption">
+                                <p>{$j.jd_content}</p>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                    <a data-slide="prev" href="carousel.html#carousel2" class="left carousel-control">
+                        <span class="icon-prev"></span>
+                    </a>
+                    <a data-slide="next" href="carousel.html#carousel2" class="right carousel-control">
+                        <span class="icon-next"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="content_list_title isIndex font_title">最近更新 <small>第<span>1</span>页</small></h2>
+    <!--首页文章列表-->
+    {volist name="artcs" id="arvo"}
+    <article class="article_exp clearfix article_exp_{$i}">
+        <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" class="article_exp_img" target=_blank><img lay-src="{$arvo.ac_imgthumb|default=$arvo.c_thumbimg}" alt="{$arvo.ac_title}" title="{$arvo.ac_title}"></a>
+        <header class="article_exp_header">
+            <h2><a href="{:url('index/index/cate',['c'=>$arvo.id])}" class="article_triggle">{$arvo.c_name}<i></i></a><a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" title="{$arvo.ac_title}" target=_blank>{$arvo.ac_title}</a></h2>
+        </header>
+        <p class="article_exp_meta">
+            <time class="article_exp_time"><i class="fa fa-clock-o"></i>{:timeago($arvo.ac_createtime)}</time>&nbsp;
+            <span class="article_exp_pv"><i class="fa fa-eye"></i> {$arvo.ac_pv}</span>&nbsp;
+            <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}#comments" class="article_exp_cmt"><i class="fa fa-comments-o"></i> {$arvo.ac_comment}</a>&nbsp;
+            <?php
+           $status = $arvo['ac_status'];
+            if($status != ''){
+                $status = explode(',',$status);
+                foreach($status as $s){
+                    echo "&nbsp;<img lay-src='/static/images/status/$s.small.gif'/>&nbsp; ";
+                }
+            }
+        ?>
+        </p>
+        <div class="article_exp_des">{$arvo.ac_subhead}</div>
+    </article>
+    {/volist}
+    <!--分页-->
+    <div class="page article_exp_page">{$artcs->render()}</div>
+
+</div>
+<script type="text/javascript">
+    //获取当前的页数
+    (function () {
+        var p = function () {
+            var arr = document.location.toString().split("?");
+            if (arr[1]) {
+                var page = arr[1].split("=");
+                return page[1];
+            } else {
+                return false;
+            }
+        }
+        var c = p();
+        if (c) {
+            var k = $('.font_title small span').html(c);
+        }
+    })();
+</script>
+{/block}

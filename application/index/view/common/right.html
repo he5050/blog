@@ -1,0 +1,74 @@
+<div class="widget widget_custom widget_custom_notitle">
+    <h3><span>最新图文</span></h3>
+    <a href="{:url('index/index/arti',['a'=>$img.f_model_id])}"><img src="{$img.f_location|default='/static/images/default.jpg'}" alt="最新发表的图文文章"></a>
+</div>
+<div class="widget widget_newlog widget_log_list">
+    <h3><span>推荐阅读</span></h3>
+    <ul class="J_log_list nopic">
+        {volist name="recommends" id="re"}
+        <li>
+            <a href="{:url('index/index/arti',['a'=>$re.ac_id])}">
+                <span class="text">{$re.ac_title}</span>
+                <span class="muted">{:timeago($re.ac_createtime)}</span>
+                <span class="muted">阅读({$re.ac_pv})</span><span class="muted">评论({$re.ac_comment})</span> </a>
+        </li>
+        {/volist}
+    </ul>
+</div>
+<div class="widget widget_hotlog widget_log_list">
+   <h3><span>标签云</span></h3>
+    <div id="tag-cloud">
+    </div>
+</div>
+<div class="widget widget_hotlog widget_log_list">
+    <h3><span>热门评论</span></h3>
+    <ul class="J_log_list ">
+        {volist name="comms" id="co"}
+        <li>
+            <a href="{:url('index/index/arti',['a'=>$co.ac_id])}{:getPage($co.ac_id,$co.id)}#comment-{$co.id}">
+                <span class="thumbnail"><img src="{$co.ac_imgthumb|default=$co.c_thumbimg}"  lay-src="{$co.ac_imgthumb|default=$co.c_thumbimg}" alt=""></span>
+                <span class="text <?php if($co['flag'] == 1){if($co['u_id'] == 1){echo 'admin';}else{echo 'user';}}else{echo 'visited';}?>"><span><i class="fa fa-user"></i> {$co.cm_name}</span>: {$co.cm_content|comment2emoji}</span>
+                <span class="muted">评论时间:{:timeago($co.cm_createtime)}</span></a>
+        </li>
+        {/volist}
+    </ul>
+</div>
+<div class="widget widget_custom">
+    <div class="widget_custom_content widget_tongji">
+        <ul class="widget_tongji_ul">
+            <li>
+                <p><span>文章：</span><em>{$info.acount}篇</em></p>
+            </li>
+            <li>
+                <p><span>评论：</span><em>{$info.comment}条</em></p>
+            </li>
+            <li>
+                <p><span>标签：</span><em>{$info.tag}个</em></p>
+            </li>
+            <li>
+                <p><span>twitter：</span><em>{$info.twitter}条</em></p>
+            </li>
+            <li>
+                <p><span>初始：</span><em>{:timeago($info.createtime)}</em></p>
+            </li>
+            <li>
+                <p><span>更新：</span><em>{:timeago($info.lasttime)}</em></p>
+            </li>
+        </ul>
+    </div>
+</div>
+{if condition="config('web.infoshow') eq 1"}
+<div class="widget widget_custom">
+    <div class="widget_custom_content widget_tongji">
+        <ul class="widget_info_ul" id="show">
+            <li><p>日期时间：<span id="nowTime"></span></p></li>
+            <li><p>当前城市(<em id="city"></em>)&nbsp; PM2.5：<span id="pm"></span></p></li>
+           <li><p>实时天气：<span id="weather"></span>&nbsp; <span id="tmp"></span></p></li>
+            <li><p>网络地址：<span id="ip"></span></p></li>
+            <li><p>地理位置：<span id="address" ></span></p></li>
+            <li><p>网络定位：<span id="positioning" ></span></p></li>
+        </ul>
+    </div>
+</div>
+{/if}
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 修改</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6 col-md-offset-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>修改权限</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="auth" action="{:url('home/privilege/editAuth')}" method="post">
+                          <div class="form-group">
+                                <label class="col-sm-3 control-label">权限名称 *：</label>
+                                <div class="col-sm-8">
+                                            <input id="title" name="title" class="form-control" type="text" value="{$authR.title}">
+                                            <input id="id" name="id"  type="hidden" value="{$authR.id}">
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>请输入权限的中文名如:用户列表，用户添加</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">权限控制器 *：</label>
+                                <div class="col-sm-8">
+                                            <input id="controller" name="controller" class="form-control" type="text" value="<?php $c = explode('/',$authR['name']); echo $c['0'];?>" >
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>请输入权限的控制器如Index,User,Privilege</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">方法名称：</label>
+                                <div class="col-sm-8">
+                                            <input id="action" name="action" class="form-control" type="text" value="<?php $c = explode('/',$authR['name']); if(count($c) > 1){
+                                                echo $c['1'];
+                                            }?>">
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>请输入方法名,add,edit,list,del等</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">权限图标：</label>
+                                <div class="col-sm-8">
+                                            <input id="icon" name="icon" class="form-control" type="text" value="{$authR.icon}">
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>权限图标fa-edit等</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">是否显示成菜单：</label>
+                                <div class="col-sm-8">
+                                            <input type="radio" name="isshow" value="0" {if condition="$authR.isshow eq 0"}checked{/if}>隐藏 &nbsp;&nbsp;<input type="radio" name="isshow" value="1" {if condition="$authR.isshow eq 1"}checked{/if}>显示
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>是否生成菜单</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">排序：</label>
+                                <div class="col-sm-8">
+                                            <input id="sort" name="sort" class="form-control" type="text" value="{$authR.sort}">
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>序号越小排序就越靠前</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">权限所属分类：</label>
+                                <div class="col-sm-8">
+                                            <select name="p_id" id="name" class="form-control">
+                                               <option value="0"> 请选择分类</option>
+                                                {volist name="authdata" id="vo"}
+                                                    <option value="{$vo.id}"
+                                                    {if condition="$vo.id eq $authR.p_id"}selected{/if}
+                                                    >{$vo.lev|str_repeat='&nbsp;&nbsp;',###}{$vo.title}</option>
+                                                {/volist}
+                                            </select>
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>选择权限所属的分类,最多支持3级分类如:用户管理->用户列表->列表查询</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <span id="result">标记为*号的不能空</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary" type="submit" disabled="disabled"><span id="ed">修改</span></button>
+                                    <button  class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/privilege/listAuth')}'">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script type="text/javascript">
+       $('#title').blur(function(){
+           var val = $(this).val();
+           val = $.trim(val);
+           if(val === '' || val === null || val === undefined){
+               $('#result').html('权限名不能空!');
+           }
+       });
+        $('#controller').blur(function(){
+            var val2 = $('#title').val();
+           val2 = $.trim(val2);
+           var val = $(this).val();
+           val = $.trim(val);
+           if(val === '' || val === null || val === undefined){
+               $('#result').html('模块名不能空!');
+           }else{
+               if(val2 === '' || val2 === null || val2 === undefined){
+                   $('#result').html('权限名不能空!');
+                }else{
+                    $('#sub').removeAttr('disabled');
+                }
+               
+           }
+       });
+        //判断是否允许提交
+        $('#ed').mouseover(function(){
+            var t = $.trim($('#title').val());
+            var m = $.trim($('#controller').val());
+            if(t != '' && m != ''){
+                $(this).parent().prop('disabled',false);
+            }else{
+                $(this).parent().prop('disabled',true);
+            }
+        });
+        (function(){
+          var options = {success : showInfo};
+          $('#auth').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "更新权限成功成功!",
+                        text: "您成功更新了权限,请刷新后查看",
+                        type: "success"
+                    },function(){
+                        //刷新当前页面
+                         window.location.reload();
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "更新权限失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }  
+      })();
+    </script>
+</body>
+
+</html>

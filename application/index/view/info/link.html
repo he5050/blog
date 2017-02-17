@@ -1,0 +1,20 @@
+{extend name="info/base" /}{block name="title"}友情链接{/block}{block name="main"}
+<div class="page_content_container">
+    <header class="page_header">
+        <h1><a href="{:url('index/info/link')}">友情链接</a></h1></header>
+    <article class="page_content article_content">
+        <p>
+            这里将展示本博客所有的友情链接，排列不分先后；如需友链，请联系我（仅限于技术类、原创类站点，其他诸如：下载站、小说站、采集站恕不互链，道不同~）
+        </p>
+    </article>
+    <div class="page_link_container">
+        <h2 class="page_link_title">合作伙伴</h2>
+        <ul class="page_link clearfix">
+           {volist name="links" id="li"}
+            <li>
+                <a href="{$li.li_url}" title="{$li.li_title}" target="_blank"><img src="{$li.li_icon}">{$li.li_title}</a>
+            </li>
+            {/volist}
+        </ul>
+    </div>
+{/block}

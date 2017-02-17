@@ -1,0 +1,123 @@
+{extend name="center/base" /} 
+{block name="title"}编辑个人信息{/block}
+{block name="main"}
+<div class="J_UserCenter_Content">
+    <h3 class="J_UserCenter_title">修改密码<em>不定期修改登录密码是一个好习惯</em></h3>
+    <div class="J_UserCenter_wrap">
+        <form method="get" class="form" autocomplete="off" action="{:url('index/center/edit')}">
+            <div class="form-group">
+                <label for="pwd">新密码 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="password" class="form-control" id="pwd" placeholder="请输入您的新密码">
+            </div>
+            <div class="form-group">
+                <label for="reppwd">重复新密码 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="password" class="form-control" id="reppwd" placeholder="请重复输入您的新密码">
+            </div>
+            <div class="form-group">
+                <label for="oldpwd">当前密码 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="password" class="form-control" id="oldpwd" placeholder="请输入您当前的登录密码">
+            </div>
+            <div class="form-group">
+                <p><span><i class="fa fa-asterisk"></i></span> 表示必填项~</p>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="form-control btn btn-info" id="sub" value="提交修改">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".form").submit(function () {
+            var newPwdNode = $("#pwd"),
+                newRepPwdNode = $("#reppwd"),
+                oldPwdNode = $("#oldpwd"),
+                Btn = $("#sub");
+            if (newPwdNode.val() != newRepPwdNode.val()) {
+                newPwdNode.focus();
+                JuserTips("密码与重复密码不一致");
+                return false;
+            }
+            if (oldPwdNode.val() == newPwdNode.val()) {
+                newPwdNode.focus();
+                JuserTips("密码未修改");
+                return false;
+            }
+            if (!J.isPassWord(newPwdNode.val()) || newPwdNode.val().length < 6 || newPwdNode.val().length > 18) {
+                newPwdNode.focus();
+                JuserTips("新密码格式错误，必须包含字母和数字，6至18位");
+                return false;
+            }
+            if (!J.isPassWord(oldPwdNode.val()) || oldPwdNode.val().length < 6 || oldPwdNode.val().length > 18) {
+                oldPwdNode.focus();
+                JuserTips("老密码格式错误，必须包含字母和数字，6至18位");
+                return false;
+            }
+            Btn.attr("disabled", true).fadeTo("slow", 0.5); //禁用点击按钮
+            $.ajax({
+                type: "POST",
+                url: "{:url('index/center/edit')}",
+                dataType: "json",
+                data: {
+                    "pwd": newPwdNode.val(),
+                    "rpwd" : newRepPwdNode.val(),
+                    "opwd": oldPwdNode.val()
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        JuserTips(msg.info, 4, "success");
+                        newPwdNode.val("");
+                        newRepPwdNode.val("");
+                        oldPwdNode.val("");
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 4000);
+                        return false;
+                    } else if (msg.code == 500) {
+                        //刷新该页
+                        JuserTips(msg.info, 5);
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 6000);
+                        return false;
+                    } else if (msg.code == 400) {
+                        JuserTips(msg.info);
+                    } else {
+                        JuserTips(msg.info);
+                    }
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                },
+                error: function () {
+                    JuserTips("网络或服务器异常，请稍后再试");
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 提示框Js方法
+         * text 提示文本
+         * time 提示显示时间
+         */
+        function JuserTips(text, time, status) {
+            var t = time || 3; //默认3s
+            var status = status || "error";
+            var tipsNode = $(".J_user_tips");
+            tipsNode.css({
+                "position": "fixed",
+                "top:": 0
+            });
+            if (status == "error") {
+                tipsNode.removeClass("J_user_tips_success").addClass("J_user_tips_normal");
+            } else {
+                tipsNode.removeClass("J_user_tips_normal").addClass("J_user_tips_success");
+            }
+            tipsNode.empty().append(text).slideDown();
+            tipsTimeHandler = setTimeout(function () {
+                tipsNode.slideUp();
+            }, t * 1000);
+        }
+    });
+</script>
+{/block}

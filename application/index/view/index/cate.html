@@ -1,0 +1,45 @@
+{extend name="layout" /} 
+{block name="title"}{$cate.c_name}{/block}
+{block name="content"}
+<div class="content">
+<div class="content_catag_container">
+<h2 class="content_catag_title isCatag font_title">{$cate.c_name}</h2>
+<p>{$cate.c_info|default='这人太懒了,什么都没有写'}</p>
+<div class="article_position">
+<i><img src="__INDEX__/images/top.png">您的位置：</i><a href="{:config('web.siteurl')}" title="{:config('web.sitetitle')}">{:config('web.sitetitle')}</a><small>&gt;&gt;</small>
+<?php
+    if(!empty($catep)){
+        echo "<a href='".url('index/index/cate',['c'=>$catep['id']])."'title='".$catep['c_name']."'>".$catep['c_name']."</a><small>&gt;&gt;</small>";
+    }
+?>{$cate.c_name}
+</div>
+</div>
+
+<!--分类文章列表-->
+{volist name="artcs" id="arvo"}
+<article class="article_exp clearfix article_exp_{$i}">
+    <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" class="article_exp_img" target=_blank><img lay-src="{$arvo.ac_imgthumb|default=$arvo.c_thumbimg}" alt="{$arvo.ac_title}" title="{$arvo.ac_title}"></a>
+    <header class="article_exp_header">
+        <h2><a href="{:url('index/index/cate',['c'=>$arvo.id])}" class="article_triggle">{$arvo.c_name}<i></i></a><a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" title="{$arvo.ac_title}" target=_blank>{$arvo.ac_title}</a></h2>
+    </header>
+    <p class="article_exp_meta">
+        <time class="article_exp_time"><i class="fa fa-clock-o"></i>{:timeago($arvo.ac_createtime)}</time>&nbsp;
+        <span class="article_exp_pv"><i class="fa fa-eye"></i> {$arvo.ac_pv}</span>&nbsp;
+        <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}#comment-place" class="article_exp_cmt"><i class="fa fa-comments-o"></i> {$arvo.ac_comment}</a>&nbsp;
+        <?php
+           $status = $arvo['ac_status'];
+            if($status != ''){
+                $status = explode(',',$status);
+                foreach($status as $s){
+                    echo "<img lay-src='/static/images/status/$s.small.gif'/>&nbsp;";
+                }
+            }
+        ?>
+    </p>
+    <div class="article_exp_des">{$arvo.ac_subhead}</div>
+</article>
+{/volist}
+<!--分页-->
+<div class="page article_exp_page">{$artcs->render()}</div>
+</div>
+{/block}

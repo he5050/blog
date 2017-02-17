@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh">
+        <meta charset="utf-8">
+        <title>HTML5 新元素 progress的简单使用</title>
+    </head>
+    <script type="text/javascript">
+        var i = 0;
+        var delay = 200; //2秒
+        var timer;
+        /**
+         * 单击事件 使用定时器来改变进度条的状态
+         */
+        function btn(){
+            var btValue = document.getElementsByTagName('input')[0];
+            //定义初始进度
+            
+//            function thread_one(){
+//                if(i <= 100){
+//                    i++;
+//                    updateProgress(i);
+//                }
+//            }
+            
+            if(btValue.value == '点击'){
+                btValue.value = '暂停';
+                timer = start(thread_one,delay);
+            }else{
+                btValue.value = '点击';
+                stop(timer);
+                document.getElementById('p').value=i;
+            }
+            if(i >100){
+                i = 0;
+            }
+        }
+        //开始
+        function start(cod,delay){
+            return timer = setInterval(cod,delay);
+        }
+        //结束
+        function stop(timer){
+            timer = clearInterval(timer);
+        }
+        //更新
+        function thread_one(){
+            if(i <=100){
+                i++;
+                updateProgress(i);
+            }
+        }
+        /**
+         * 更新进度状态
+         * @param newValue 表示当前的的值
+         */
+        function updateProgress(newValue){
+            var progressBar = document.getElementById('p');
+            var meterBar = document.getElementsByTagName('meter')[0];
+            meterBar.value = newValue;
+            progressBar.value = newValue;
+            //第一个span标签
+            progressBar.getElementsByTagName('span')[0].textContent = newValue;
+        }
+    </script>
+    <body>
+        <section>
+  <!-- progress元素-->
+            <h2>progress元素的使用</h2>
+            <p>完成的百分比 <progress style="background-color:red" id="p" max="100"><span>0</span>%</progress></p>
+            <input type="button" onclick="btn()" value="点击">
+            <br>
+            <hr>
+            <h2>meter元素的使用</h2>
+<!--meter元素-->
+            <meter value="0" min="0" max="100" low="10" high="90" optimum="80"></meter>
+            <meter></meter>
+        </section>
+    </body>
+</html>

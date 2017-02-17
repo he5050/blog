@@ -1,0 +1,25 @@
+{volist name="artcs" id="arvo"}
+<article class="article_exp clearfix article_exp_{$i}">
+    <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" class="article_exp_img" target=_blank><img lay-src="{$arvo.ac_imgthumb|default=$arvo.c_thumbimg}" alt="{$arvo.ac_title}" title="{$arvo.ac_title}"></a>
+    <header class="article_exp_header">
+        <h2><a href="{:url('index/index/cate',['c'=>$arvo.id])}" class="article_triggle">{$arvo.c_name}<i></i></a><a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}" title="{$arvo.ac_title}" target=_blank>{$arvo.ac_title}</a></h2>
+    </header>
+    <p class="article_exp_meta">
+        <time class="article_exp_time"><i class="fa fa-clock-o"></i>{:timeago($arvo.ac_createtime)}</time>&nbsp;
+        <span class="article_exp_pv"><i class="fa fa-eye"></i> {$arvo.ac_pv}</span>&nbsp;
+        <a href="{:url('index/index/arti',['a'=>$arvo.ac_id])}#comments" class="article_exp_cmt"><i class="fa fa-comments-o"></i> {$arvo.ac_comment}</a>&nbsp;
+        <?php
+           $status = $arvo['ac_status'];
+            if($status != ''){
+                $status = explode(',',$status);
+                foreach($status as $s){
+                    echo "&nbsp;<img lay-src='/static/images/status/$s.small.gif'/>&nbsp; ";
+                }
+            }
+        ?>
+    </p>
+    <div class="article_exp_des">{$arvo.ac_subhead}</div>
+</article>
+{/volist}
+<!--分页-->
+<div class="page article_exp_page">{$artcs->render()}</div>

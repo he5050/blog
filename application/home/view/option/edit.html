@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ {$op.op_name}修改</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-10 col-md-offset-1">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>{$op.op_name}修改</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="option" action="{:url('home/option/edit')}" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">项目名 *：</label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="op_id" value="{$op.op_id}">
+                                    <input id="op_title" name="op_title" class="form-control" type="text" value="{$op.op_title}" disabled>
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>项目名如:sitename,sitemap,sitetel</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">项目标题 *：</label>
+                                <div class="col-sm-8">
+                                    <input id="op_name" name="op_name" class="form-control" type="text" value="{$op.op_name}">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>项目标题:网站标题，网站电话</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label ">项目值 *：</label>
+                                <div class="col-sm-8 v">
+                                    {if condition="$op.op_type neq 'textarea'"}
+                                    <input id="op_value" name="op_value" class="form-control" type="text" value="{$op.op_value}" title="input"> {else/}
+                                    <textarea name="op_value" id="op_value" cols="30" rows="10" class="form-control" title="textarea">
+                                        {$op.op_value}
+                                    </textarea>
+                                    {/if}
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>项目值:博客平台,如果是单选按钮数据只能是1或是0,1表示第一个值,0表示第二值</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">项目类型 *：</label>
+                                <div class="col-sm-8">
+                                    <label class="radio-inline">
+                                        <input type="radio" {if condition="$op.op_type eq 'input'" }checked{/if} value="input" name="op_type">input
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="textarea" {if condition="$op.op_type eq 'textarea'" }checked{/if} name="op_type">textarea
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="radio" {if condition="$op.op_type eq 'radio'" }checked{/if} name="op_type">radio
+                                    </label>
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>后台操作显示的类型:单选,文本域,输入框</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">单选的值 *：</label>
+                                <div class="col-sm-8">
+                                    <input name="op_tips" class="form-control" {if condition="$op.op_type neq 'radio'" }disabled="disabled" {/if} value="{$op.op_tips}" id="op_tips" />
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>如果选择是单选按钮的话在这里输入选择值如 启用,禁用</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <span id="result">标记为*号的不能空</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary " type="submit"><span id="s">保存</span></button>
+                                    <button id="sub" class="btn btn-primary " type="button" onclick="window.location.href='{:url('home/option/list')}'"><span id="s">返回</span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script type="text/javascript">
+        //获取op_value的标签类型
+        var opvt = $('#op_value')[0].title;
+        //获取值
+        if (opvt != 'input') {
+            var o = $('#op_value').text();
+        } else {
+            var o = $('#op_value').val();
+        }
+        $(':radio').click(function () {
+            var k = $(this).val();
+            if (k == 'radio') {
+                $('#op_tips').removeAttr('disabled');
+            } else {
+                if (k == 'textarea') {
+                    //获取当前的标签类型
+                    var otype = $('#op_value')[0].title;
+                    if (otype != 'textarea') {
+                        //获取op_value的值
+                        var n = "<textarea name='op_value' id='op_value' cols='30' rows='10' class='form-control' title='textarea'></textarea>";
+                        //替换成新的
+                        $('.v').html(n);
+                        $('#op_value').text(o);
+                    }
+                } else {
+                    var n = "<input id='op_value' name='op_value' class='form-control' type='text' value='' title='input'>";
+                    //替换成新的
+                    $('.v').html(n);
+                    $('#op_value').val(o);
+                }
+
+                $('#op_tips').attr('disabled', 'disabled');
+            }
+        });
+        (function(){
+          var options = {success : showInfo};
+          $('#option').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "保存配置成功!",
+                        text: "您成功更新了配置,请刷新后查看",
+                        type: "success"
+                    },function(){
+                        //刷新当前页面
+                         window.location.reload();
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "保存配置文件失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }  
+      })();
+    </script>
+</body>
+
+</html>

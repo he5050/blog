@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 评论列表</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H+">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico"> <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/footable/footable.core.css" rel="stylesheet">
+
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <a class="text-info" title="点击我刷新"><h5>评论列表</h5><i class="fa fa-refresh fa-spin"></i></a>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项 01</a>
+                                    </li>
+                                    <li><a href="#">选项 02</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                                   <div class="input-group">
+                                    <input type="text" placeholder="查找评论" name="info" class="form-control input-lg" id="filter">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-lg btn-primary" type="submit">
+                                            搜索
+                                        </button>
+                                    </div>
+                            </div>
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="20" data-filter="#filter">
+                                <thead>
+                                <tr>
+
+                                    <th data-toggle="true">序号</th>
+                                    <th>文章分类</th> 
+                                    <th>文章标题</th>
+                                    <th>文章评论内容</th>
+                                    <th>评论人昵称</th>
+                                    <th>评论人邮箱</th>
+                                    <th data-hide="all">文章副标题</th>
+                                    <th data-hide="all">评论上级ID</th>
+                                    <th>评论状态</th>
+                                    <th>最后一次更新时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {volist name="comms" id="vo"}
+                                <tr id="_{$vo.id}">
+                                    <td>{$i}</td>                                  
+                                    <td>{$vo.c_name}</td>
+                                    <td>{$vo.ac_title}</td>
+                                    <td>{$vo.lev|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}{$vo.cm_content|comment2emoji}</td>
+                                    <td>{$vo.lev|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}{$vo.cm_name}</td>
+                                    <td>{$vo.lev|str_repeat='&nbsp;&nbsp;&nbsp;&nbsp;',###}{$vo.cm_email}</td>
+                                    <td>{$vo.ac_subhead}</td>
+                                    <td>{$vo.p_id}</td>
+                                    <td id="ison">{$vo.cm_ison}</td>
+                                    <td>{$vo.cm_createtime}</td>
+                                    <td>
+                                    {if condition="$vo.cm_ison eq '正常' "}
+                                        <a href="javascript:removeinfo({$vo.id});"><i class="fa fa-trash-o text-danger">删除</i></a>&nbsp;&nbsp;
+                                        <a><i class="fa fa-unlock text-info"><s>恢复</s></i></a>&nbsp;&nbsp;
+                                    {else/}
+                                        <a><i class="fa fa-trash-o text-danger"><s>删除</s></i></a>&nbsp;&nbsp;
+                                        <a href="javascript:unlockinfo({$vo.id});"><i class="fa fa-unlock text-info">恢复</i></a>&nbsp;&nbsp;
+                                    {/if}
+                                    </td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <ul class="pagination pull-right"></ul>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+    <script src="__HOME__js/plugins/footable/footable.all.min.js"></script>
+    <script src="__HOME__js/plugins/layer/layer.min.js"></script>
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+        function removeinfo(id) {
+            layer.confirm('您确定要删除这条信息吗？', {
+                btn: ['删除', '取消']
+            }, function () {
+                $.post("{:url('home/comment/del')}", {
+                    'id': id
+                }, function (msg) {
+                    //console.log(data.status);
+                    if (msg.status == 1) {
+                        layer.msg(msg.msg, {
+                            icon: 1
+                        });
+                        $('#_' + id).empty();
+                    } else {
+                        layer.msg(data.msg, {
+                            icon: 2
+                        });
+                    }
+                }, 'json');
+            }, function () {});
+        }
+
+        function unlockinfo(id) {
+            layer.confirm('您确定要恢复这条信息吗？', {
+                btn: ['恢复', '取消']
+            }, function () {
+                $.post("{:url('home/comment/unlock')}", {
+                    'id': id
+                }, function (msg) {
+                    if (msg.status == 1) {
+                        layer.msg(msg.msg, {
+                            icon: 1
+                        });
+                        //删除
+                        var del = $('#_' + id).find('.text-danger');
+                        del.html('删除');
+                        del.parent('a').attr('href',"javascript:removeinfo("+id+");");
+                        //禁用
+                        //恢复
+                        var unlock = $('#_' + id).find('.text-info');
+                        unlock.html('<s>恢复</s>');
+                        unlock.parent('a').attr('href',"javascript:;");
+                        //状态
+                        $('#_' + id).find('#ison').text('正常');
+                    } else {
+                        layer.msg(msg.msg, {
+                            icon: 2
+                        });
+                    }
+                }, 'json');
+            }, function () {});
+        }
+    </script>
+
+</body>
+
+</html>

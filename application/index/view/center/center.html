@@ -1,0 +1,49 @@
+{extend name="center/base" /} 
+{block name="title"}会员中心{/block}
+{block name="main"}
+<div class="J_UserCenter_Content">
+    <h3 class="J_UserCenter_title">我的账户<em>账户信息总览</em></h3>
+    <div class="J_UserCenter_wrap">
+        <ul class="J_UserCenter_indexInfo clearfix">
+            <li>
+                <div class="J_UserCenter_item">
+                    <h3>个人资料</h3>
+                    <div class="J_UserCenter_list">
+                        <div class="J_UserCenter_p"><span>昵称：</span>{:session('u_sname')}</div>
+                        <div class="J_UserCenter_p"><span>邮箱：</span>{:session('u_email')}</div>
+                        <div class="J_UserCenter_p"><span>网址：</span>-</div>
+                        <div class="J_UserCenter_p"><span>扣扣：</span>-</div>
+                        <div class="J_UserCenter_p"><span>手机：</span>-</div>
+                        <div class="J_UserCenter_p"><span>性别：</span>妹子</div>
+                        <!--div class="J_UserCenter_p"><span>签名：</span>-</div-->
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <div class="J_UserCenter_item">
+                    <h3>账户设置</h3>
+                    <div class="J_UserCenter_list">
+                        <h4>账号关联</h4>
+                        <div class="J_UserCenter_Open_Wrap">
+                            <a href="" class="noBindWC useTooltips" data-title="点击关联微信"></a>
+                            <a href="" class="noBindQQ useTooltips" data-title="点击关联QQ"></a>
+                            <a href="" class="noBindWB useTooltips" data-title="点击关联微博"></a>
+                        </div>
+
+                        <h4>默认头像和昵称</h4>
+                        <div class="J_UserCenter_Open_figure">
+                            <div class="radio">
+                                <label class="useTooltips" data-title="评论中使用默认随机头像和默认昵称">
+                                    <input type="radio" name="figure" class="figure useTooltips" value="n" checked="checked">默认随机头像</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+        <p class="Juser_Open_des">注：账号关联通过<a href="http://baike.baidu.com/view/3948029.htm" target=_blank>oAuth 2.0</a>、<a href="http://baike.baidu.com/view/832917.htm" target=_blank>OpenID</a>协议实现，仅能获取到OpenID、昵称、头像和性别4项数据。</p>
+    </div>
+</div>
+{/block}

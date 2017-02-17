@@ -1,0 +1,146 @@
+{extend name="layout" /} 
+{block name="title"}{$arts.ac_title}{/block}
+{block name="content"}
+<!--引入代码高亮的css与js-->
+{js href="__INDEX__js/SyntaxHighlighter/shCore.js" /}
+{css href="__INDEX__js/SyntaxHighlighter/shCoreDefault.css" /}
+<script type="text/javascript">
+    $().ready(function(){
+        SyntaxHighlighter.all();
+        //$(".article_content p img").parent('p').replaceAll("<div class='article_image'></div>");
+        var p = $('.article_content p img').parent('p');
+        //p.html("<div class='article_image'>"+k+"</div>");
+        p.each(function(i){
+            $(this).replaceWith("<div class='article_image'>"+$(this).html()+"</div>");;
+        });
+        //$("<div class='article_image'>"+p.html()+"</div>").replaceAll(p);
+    });
+</script>
+<div class="content ar_content">
+    <div class="article_position">
+        <i><img src="__INDEX__/images/top.png">您的位置：</i>
+        <a href="http://www.my.com" title="{:config('web.sitetitle')}" id="home">{:config('web.sitetitle')}</a><small>&gt;&gt;</small>
+        <?php
+        if(!empty($catep)){
+            echo "<a href='".url('index/index/cate',['c'=>$catep['id']])."'title='".$catep['c_name']."'>".$catep['c_name']."</a><small>&gt;&gt;</small>";
+        }
+    ?>
+            <a href="{:url('index/index/cate',['c'=>$arts['id']])}" title="{$arts.c_name}">{$arts.c_name}</a>
+    </div>
+    <header class="article_header">
+        <h1><a href="{:url('index/index/arti',['a'=>$arts['ac_id']])}">{$arts.ac_title}</a></h1>
+        <div class="article_meta">
+            <span><i class="fa fa-user"></i> <a href="" title="">{$arts.ac_auth}</a></span>
+            <span><i class="fa fa-clock-o"></i>{:timeago($arts.ac_createtime)}</span>
+            <span><i class="fa fa-eye"></i> {$arts.ac_pv}次浏览</span>
+            <span><i class="fa fa fa-folder-open"></i> <a href="{:url('index/index/cate',['c'=>$arts['id']])}">{$arts.c_name}</a></span>
+        </div>
+    </header>
+    <article class="article_content">
+        {$arts.ac_content}
+        <div class="article_copy">转载请注明本文标题和链接：《<a href="{:url('index/index/arti',['a'=>$arts['ac_id']])}">{$arts.ac_title}</a>》</div>
+    </article>
+    <footer class="article_footer">
+       
+        <!-- JiaThis Button BEGIN 输入自己的分享ID就可以了 -->
+        <div class="article_share bdsharebuttonbox bdshare-button-style0-24" data-bd-bind="{:config('web.siteshare')}">
+            <strong>分享到：</strong>
+            <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+            <a class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a class="bds_weixin bdsm" data-cmd="weixin" title="分享到微信"></a>
+            <a class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>
+            <a class="bds_sqq bdsm" data-cmd="sqq" title="分享到QQ好友"></a>
+            <a class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+            <a class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+            <span class="bds_count" data-cmd="count" title="累计分享7次">7</span>
+        </div>
+        <!-- JiaThis Button END -->
+        <div class="article_tags">
+            <?php
+               if($arts['ac_tags'] != ''){
+                 echo "标签：";
+                  $str = str_replace('，',',',$arts['ac_tags']);
+                   $arr = explode(',',$str);
+                    $i=0;
+                    if(is_array($arr)){
+                        foreach($arr as $v){
+                            echo "<a href='".url('index/index/tag',['t'=>$v])."' class='article_tag article_tag".$i++."'>".$v."</a>";
+                        }
+                    } 
+               }
+            ?>
+        </div>
+    </footer>
+    <nav class="article_nav"> <span class="article_prev_log">上一篇<a href="{$pageArts[0]['ac_id']}">{$pageArts[0]['ac_title']}</a></span>
+        <span class="article_next_log"><a href="{$pageArts[1]['ac_id']}">{$pageArts[1]['ac_title']}</a> 下一篇</span>
+    </nav>
+    <div class="article_related">
+        <h3>相关推荐</h3>
+        <ul>
+            {volist name="otherArts" id="oa"}
+                <li><a href="{:url('index/index/arti',['a'=>$oa.ac_id])}">{$oa.ac_title}</a>
+                    <time>{$oa.ac_createtime|date="Y-m-d",###}</time>
+                </li>
+            {/volist}
+        </ul>
+    </div>
+    <div class="article_comment">
+        <div class="comment_title" id="comments">
+            <h3>网友评论<strong>{$arts.ac_comment}</strong></h3> </div>
+        <div class="comment_form" id="comment-place">
+            <div class="comment_post_wrap comment_post" id="comment-post">
+                <a name="respond"></a>
+                <form method="post" name="commentform" action="{:url('index/index/comm')}" id="commentform">
+                    <input type="hidden" name="gid" id="comment-gid" value="{$arts.ac_id}">
+                    <input type="hidden" name="pid" id="comment-pid" value="0">
+                    <input type="hidden" name="uid" id="comment-uid" value="<?php if(session('u_id')>0){echo session('u_id');}else{echo '0';}?>">
+                    <div class="form-group form_textarea">
+                        <div class="comment_textare">
+                            <textarea name="comment" id="comment" placeholder="来盖楼吧~" title="来盖楼吧~"></textarea>
+                        </div>
+                        <div class="form-group submit_container">
+                            <div class="comment_tools">
+                                <span class="comment_avator"><img src="<?php if(session('u_id')>0 && session('u_icon')){echo '__INDEX__'.session('u_icon');}elseif(cookie('u_icon')){echo '__INDEX__'.cookie('u_icon');}else{echo '__INDEX__images/head/1.png';}?>" title="<?php if(session('u_id')>0){echo session('u_sname');}elseif(cookie('u_sname')){echo cookie('u_sname');}else{echo '游客';}?>"><em class="commentUser_type <?php if(session('u_id')>1){echo 'reg_user';}elseif(session('u_id') == 1){echo 'reg_admin';}else{echo 'none_user';}?>" title="<?php if(session('u_id')>0){echo session('u_sname');}elseif(cookie('u_sname')){echo cookie('u_sname');}else{echo '游客';}?>"><?php if(session('u_id')>0){echo session('u_sname');}elseif(cookie('u_sname')){echo cookie('u_sname');}else{echo '游客';}?></em></span> <span class="comment_face_btn"><i class="fa fa-smile-o"></i> 表情</span>
+                                <span class="cancel-reply" id="cancel-reply" style="display:none;">
+                            <a href="javascript:void(0);" onclick="cancelReply()">取消回复</a>
+                        </span>
+                                <div class="comment_submit_wrap">
+                                    <span class="comment_info">Ctrl+Enter快速提交</span>
+                                    <button type="submit" name="submit" id="comment_submit" class="sub_btn"><i class="fa fa-check-circle-o"></i> 提交评论</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {if condition= "($Think.session.u_id lt 1) AND ($Think.cookie.u_id lt 1)"}
+                    <div class="comment_user_info" style="display:block;">
+                        <div class="form-group">
+                            <input type="text" id="comname" name="comname" value="{:session('u_sname')}" placeholder="昵称">
+                            <label for="comname">昵称（必填）</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="commail" name="commail" value="{:session('u_email')}" placeholder="邮箱">
+                            <label for="commail">邮箱（必填）</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="comurl" name="comurl" value="<?php if(session('cm_url') && session('cm_url') != 'javascript:;') echo session('cm_url');?>" placeholder="网址">
+                            <label for="comurl">网址（选填）</label>
+                        </div>
+                    </div>
+                    {/if}
+                </form>
+            </div>
+        </div>
+        <div class="comment_views">
+            <ol class="parents">
+
+                <!--ol class="parents"-->
+              <?php if(!empty($comm)){echo $comm;echo  '<div class="page comment-page">'.$comm1->render().'</div>';}?>
+               
+                <!--/ol-->
+            </ol>
+        </div>
+    </div>
+</div>
+{css href="__INDEX__css/share.css" /} 
+{/block}

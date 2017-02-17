@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 编辑链接</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6 col-md-offset-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>编辑链接</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="add" action="{:url('home/option/ledit')}" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">链接名称 *：</label>
+                                <div class="col-sm-8">
+                                    <input id="title" name="title" class="form-control" type="text" value="{$link.li_title}">
+                                    <input id="id" name="id" type="hidden" value="{$link.li_id}">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>最好不保持在16个字内</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">链接的地址 *：</label>
+                                <div class="col-sm-8">
+                                    <input id="url" name="url" class="form-control" type="text" value="{$link.li_url}">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>必须是以http://或是https://开头</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">链接的图标 *：</label>
+                                <div class="col-sm-8">
+                                    <input id="icon" name="icon" class="form-control" type="text" value="{$link.li_icon}">
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>LOGO的样式为<img id="ico" src="{$link.li_icon}" alt="{$link.li_title}"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <span id="result">标记为*号的不能空</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary " type="submit" disabled="disabled"><span id="s">提交</span></button>
+                                    <button class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/option/llist')}'">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script type='text/javascript' src='__INDEX__js/Jlib.js'></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script src="__HOME__js/dropzone.min.js"></script>
+    <script type="text/javascript">
+        $('#s').mouseover(function () {
+            var title = $('#title').val();
+            title = $.trim(title);
+            var url = $('#url').val();
+            var icon = $('#icon').val();
+            icon = $.trim(icon);
+            url = $.trim(url);
+            if (title != '' && url !='' && icon != '') {
+                //alert($(this).parent().attr('class'));
+                $(this).parent().prop('disabled', false);
+            }
+        });
+        $('#url').blur(function(){
+            //获取url
+            var url = this.value;
+            if(J.isUrl(url)){
+                //$('#icon').attr('src',url+'/favicon.ico');
+                var icon = $('#icon').val();
+                if(icon == ''){
+                    $('#icon').val(url);
+                }
+            }else{
+                this.value = 'http://'+url;
+                swal({
+                  title: "请填写正确的URL",
+                  text: "必须以http://或是https:// 开头",
+                  type: "warning",
+                  timer: 2000,
+                  showConfirmButton: false
+                });
+            }
+            
+        });
+        $('#icon').blur(function(){
+            var url = this.value;
+            if(J.isUrl(url)){
+                $('#ico').attr('src',url);
+                 $('#ico').attr('alt',$('#title').val());
+            }
+        });
+        (function(){
+          var options = {success : showInfo};
+          $('#add').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "恭喜您修改链接成功!",
+                        text: "您成功修改链接,即将跳转到链接列表页面",
+                        type: "success"
+                    },function(){
+                        //跳转到
+                        window.location.href="{:url('home/option/llist')}";
+                    });
+                }else{
+                    $('#s').parent().prop('disabled', false);
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "修改链接失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }  
+      })();
+    </script>
+</body>
+
+</html>

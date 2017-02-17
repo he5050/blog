@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 添加用户组</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <style type="text/css">
+        .s1 .s2 .s3{
+            display: inline-block;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6 col-md-offset-3">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>添加用户组</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="group" action="{:url('addGroup')}" method="post">
+                          <div class="form-group">
+                                <label class="col-sm-3 control-label">用户组名称 *：</label>
+                                <div class="col-sm-8">
+                                            <input id="title" name="title" class="form-control" type="text" >
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>现有管理组有:{volist name="groupdata" id="au"}
+                                            {$au.title} 
+                                            {/volist}</span>
+                                </div>
+                            </div>
+                          <div class="hr-line-dashed"></div>
+                          <div class="form-group">
+                                <label class="col-sm-3 control-label">权限名称 *：</label>
+                                <div class="col-sm-8">
+                                         <div class="s">
+                                          {volist name="authdata" id="one"}
+                                              {if condition="$one.lev eq 0"}
+                                                 <div class="s1">
+                                                  <input class="one" type="checkbox" value="{$one.id}" name="rules[]">{$one.title}
+                                                  <div class="s2">
+                                                  {volist name="authdata" id="two"}
+                                                        {if condition="$two.p_id eq $one.id"}
+                                                        
+                                                         <input class="two" type="checkbox" value="{$two.id}" name="rules[]">{$two.title}
+                                                         {volist name="authdata" id="three"}
+                                                            
+                                                             {if condition="$three.p_id eq $two.id"}
+                                                                <div class="s3">
+                                                                 <input type="checkbox" value="{$three.id}" name="rules[]">{$three.title}
+                                                                 </div>
+                                                             {/if}
+                                                             
+                                                         {/volist}
+                                                        
+                                                         {/if} 
+                                                  {/volist}
+                                                   </div>
+                                                  <hr>
+                                                  </div>
+                                                  
+                                              {/if}
+                                           {/volist}
+                                           </div>
+                                            <span class="help-block m-b-none">
+                                            <button id="quan" class="btn btn-xs btn-primary" type="button" >全选</button>
+                                               <br>
+                                                <i class="fa fa-info-circle"></i>请在相应的权限处勾选就可以了,如果想具有用户管理的所的权限,直接在用户管理前打<i class="fa fa-check text-navy"></i></span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <span id="result">标记为*号的不能空</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary" type="submit" disabled="disabled"><span id="check">提交</span></button>
+                                    <button  class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/privilege/listGroup')}'">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script type="text/javascript">
+        //全选与反选按钮
+      $('#quan').click(function(){
+          var name = $(this).html();
+          if(name == '返选'){
+              $(':checkbox').prop('checked',false);
+              $(this).html('全选');
+          }else{
+              //选中所有checkbox
+              $(':checkbox').prop('checked','checked');
+              $(this).html('返选');
+          }
+      });
+        //选中某一个权限 要设置对面的上次父类 也为选中
+        $(':checkbox').click(function(){
+            var clas = $(this).parent().prev().attr('class');
+            //取得 所在属性
+            var flag = $(this).prop('checked');
+            //查询父类
+            var obj = $(this).parent().prev();
+           if(clas == 'one'){
+               obj.prop('checked',true);
+           }else if(clas == 'two'){
+               //所选的为三级分类所以要把其上的所有父类都要选中
+                obj.prop('checked',true);
+               obj.parent().prev().prop('checked',true);
+           }
+            
+            //判断同级的所有checkbox是否被选中
+            if(flag == false){
+                var l = '';
+                $(this).parent().find(':checkbox').each(function(){
+                    l = $(this).prop('checked')+l;
+                });
+                //如果全都没有被选中,取消一级分类
+                var k = l.indexOf('true');
+                if(k == -1){
+                   if(clas == 'one'){
+                       obj.prop('checked',false);
+                   }
+                    //如果3级分类
+                    if(clas == 'two'){
+                        obj.parent().prev().prop('checked',false);
+                    }
+                }
+            }
+        });
+        //选中某一类别 其类别下面的所有子类都被选中
+        $('.one').click(function(){
+            var val = $(this).prop('checked');
+            //查找下面的所有了类
+            //var c = $(this).next().attr('class');
+            //查找下面的所有子类并设置属性 是否被选中
+            $(this).next().find(':checkbox').prop('checked',val);
+        });
+        
+        //判断填写信息没有
+        $('#check').mouseover(function(){
+            //判断title是否有填写
+           var title = $('#title').val();
+            title = $.trim(title);
+            //判断是否有选择权限
+            var ch = '';
+            $(':checkbox').each(function(){
+                ch = $(this).prop('checked') + ch;
+            });
+            var k = ch.indexOf('true');
+            if(k != -1 && title != ''){
+                //都填写和选了
+               $(this).parent().removeAttr('disabled');
+            }else{
+                $(this).parent().attr('disabled','disabled');
+            }
+        });
+        (function(){
+          var options = {success : showInfo};
+          $('#group').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "添加用户组成功",
+                        text: "即将跳转到用户组列表",
+                        type: "success"
+                    },function(){
+                        //刷新当前页面
+                         //window.location.reload();
+                        window.location.href="{:url('home/privilege/listGroup')}";
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "添加用户组失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }  
+      })();
+    </script>
+</body>
+
+</html>

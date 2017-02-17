@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--360浏览器优先以webkit内核解析-->
+
+
+    <title>H+ </title>
+
+    <link rel="shortcut icon" href="../"> <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    
+
+</head>
+
+<body class="gray-bg">
+    <div class="row  border-bottom white-bg dashboard-header">
+        <div class="col-sm-12">
+            <blockquote class="text-warning" style="font-size:14px">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt quo, dicta soluta necessitatibus autem. Fugiat quibusdam expedita, vitae esse iste itaque ea odio consectetur, minus, quas dignissimos eius reiciendis sit.
+                <br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat quae dolore eaque optio quaerat deleniti accusamus quo, vitae, architecto laboriosam fuga. Ipsum sed dolorem provident natus, officia obcaecati deleniti distinctio?
+                <br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam repellendus accusamus veniam impedit ducimus libero sed ut, explicabo similique tempora eligendi vitae asperiores quos maxime ea reiciendis dolore porro! Error!
+                <br>…………
+                <h4 class="text-danger">H+</h4>
+            </blockquote>
+
+            <hr>
+        </div>
+        <div class="col-sm-3">
+            <h2>Hello,Guest</h2>
+            <small>移动设备访问请扫描以下二维码：</small>
+            <br>
+            <br>
+            <br>
+        </div>
+        <div class="col-sm-5">
+            <h2>
+                            H+ 
+                        </h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, fuga sit vel libero nesciunt, sapiente a cum totam nemo dolorem consequatur animi doloremque distinctio facere quisquam. Iste, hic odio esse!
+            <p>
+                <b>当前版本：</b>v4.1.0
+            </p>
+            <p>
+                <b>主要更新有</b><span class="label label-warning">XXXXX</span>
+            </p>
+            <br>
+            <p>
+                <a class="btn btn-success btn-outline" href="javascript:;" target="_blank">
+                    <i class="fa fa-qq"> </i> 联系我
+                </a>
+                <a class="btn btn-white btn-bitbucket" href="javascript:;" target="_blank">
+                    <i class="fa fa-home"></i> 访问博客
+                </a>
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <h4>特别说明：</h4>
+            <ol>
+                <li>使用的模板为H+模板</li>
+                <li>使用环境为phpstudy</li>
+                <li>使用了php7</li>
+                <li>使用了TP5</li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-4">
+
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>服务器信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">环境配置</a>
+                                </li>
+                                <li><a href="#">服务器配置</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <table class="table table-hover">
+                            <thead>
+                            </thead>
+                            <tbody>
+                               {volist name="server" id="vo"}
+                                <tr>
+                                    <td>{$i}</td>
+                                    <td><span class="line info">{$key}</span>
+                                    </td>
+                                    <td>{$vo}</td>
+                                    <td class="text-navy"> <i class="fa fa-hand-o-left"></i> </td>
+                                </tr>
+                                {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>联系方式</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">环境配置</a>
+                                </li>
+                                <li><a href="#">服务器配置</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content">
+                         <p><i class="fa fa-send-o"></i> 微博：{:config('web.siteweibo')}
+                        </p>
+                        <p><i class="fa fa-qq"></i> QQ：{:config('web.siteqq')}
+                        </p>
+                        <p><i class="fa fa-weixin"></i> 微信：{:config('web.siteweixin')}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>更新日志</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">环境配置</a>
+                                </li>
+                                <li><a href="#">服务器配置</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <div class="panel-body">
+                            <div class="panel-group" id="version">
+                                {volist name="updateData" id="up"}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#version" href="#v{$i}">{$up.up_version}</a><code class="pull-right">{$up.up_createtime|date="Y-m-d H:m:s",###}</code>
+                                            </h5>
+                                    </div>
+                                    <div id="v{$i}" class="panel-collapse collapse {if condition="$i eq 1"}in{/if}">
+                                        <div class="panel-body">
+                                            <div class="alert alert-warning">{$up.up_main}</div>
+                                            {$up.up_content}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/volist}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>说明</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">环境配置</a>
+                                </li>
+                                <li><a href="#">服务器配置</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <p>获得什么？</p>
+                        <ol>
+                            <li>XXX</li>
+                        </ol>
+                        <hr>
+                        <p>XXXX</p>
+                        <div class="alert alert-warning">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus libero doloribus molestiae dolorum sequi beatae non accusamus architecto modi maiores? Incidunt doloribus, ut possimus inventore, eum nihil ullam libero pariatur.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__HOME__js/plugins/layer/layer.min.js"></script>
+    
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+
+    <!-- 欢迎信息 -->
+    <script src="__HOME__js/welcome.js"></script>
+</body>
+
+</html>

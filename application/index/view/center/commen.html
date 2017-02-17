@@ -1,0 +1,24 @@
+{extend name="center/base" /} 
+{block name="title"}评论列表{/block}
+{block name="main"}
+<div class="J_UserCenter_Content">
+    <h3 class="J_UserCenter_title">我的评论</h3>
+    
+    <div class="J_UserCenter_wrap">
+        <div class="J_UserCenter_Comment">
+            <ul>
+                {volist name="comms" id="vo"}
+                    <li class="Juser_comment_items">
+                        <p class="Juser_comment_time">{$vo.cm_createtime|date="Y-m-d H:i:s",###}</p>
+                        <div class="Juser_comment_section">
+                            <p class="Juser_comment_text">{:comment2emoji($vo['cm_content'])}</p>
+                            <p class="Juser_comment_info">评论文章：<a href="{:url('index/index/arti',['a'=>$vo.ac_id])}#comment-{$vo.id}" target="_blank">《{$vo.ac_title}》</a> 评论：{$vo.ac_comment}</p>
+                        </div>
+                    </li>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="J_UserCenter_page">{$comms->render()}</div>
+</div>
+{/block}

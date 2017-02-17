@@ -1,0 +1,26 @@
+{extend name="info/base" /}
+{block name="title"}历史归档{/block}
+{block name="main"}
+<div class="page_content_container">
+    <header class="page_header">
+        <h1><a href="">文章归档</a></h1>
+    </header>
+    <article class="page_content article_content">
+        
+    </article>
+    <div class="page_archive">
+           {volist name="allArtis" id="artis"}
+            <div class="page_archive_item">
+                <h2>{$key}</h2>
+                <ul class="page_archive_list">
+                   {volist name="artis" id="arti"}
+                    <li>
+                        <time>{$arti.ac_createtime|date="d",###}日</time><a href="{:url('index/index/arti',['a'=>$arti.ac_id])}" target="_blank">{$arti.ac_title}</a>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+            {/volist}
+    </div>
+</div>
+{/block}

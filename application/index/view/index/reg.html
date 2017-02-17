@@ -1,0 +1,151 @@
+{extend name="layout" /} {block name="content"}
+<script type="text/javascript" src="http://tool.keleyi.com/ip/visitoriphost/"></script> 
+<div class="container">
+    <div class="content_wrap J_user_container">
+        <div class="content_wrap J_user_tips J_user_tips_normal">提示信息</div>
+        <div class="Juser_sign_left">
+            <form method="post" id="Juser_login_form" class="Juser_form" action="{:url('index/index/reg')}" autocomplete="off">
+                <h1>会员注册</h1>
+                <div class="form-group">
+                    <label for="Juser_iptName">昵称</label>
+                    <input type="text" class="form-control Juser_input" placeholder="设置昵称" id="Juser_iptName" autocomplete="off" name="n">
+                </div>
+                <div class="form-group">
+                    <label for="Juser_iptMail">邮箱</label>
+                    <input type="text" class="form-control Juser_input" placeholder="设置邮箱" id="Juser_iptMail" autocomplete="off" name="u">
+                </div>
+                <div class="form-group">
+                    <label for="Juser_iptPwd">密码</label>
+                    <input type="password" class="form-control Juser_input" placeholder="设置密码" id="Juser_iptPwd" name="p">
+                </div>
+                <div class="form-group">
+                    <label for="Juser_iptPwd">密码</label>
+                    <input type="password" class="form-control Juser_input" placeholder="重复密码" id="Juser_riptPwd" name="rp">
+                </div>
+                <div class="form-group">
+                    <label for="Juser_iptPwd">验证码</label>
+                    <input type="text" class="form-control Juser_input" placeholder="请输入验证码" id="Juser_iptCap" name="c">
+                </div>
+                <div class="form-group cap">
+                       {:captcha_img()}
+                </div>
+                <div class="form-group juser_ipt_sub">
+                    <input type="submit" class="form-control Juser_input btn-info" id="Juser_Sub_login" value="注册">
+                    <span class=""  id="keleyivisitorip"></span>
+                </div>
+                <div class="Juser_ipt_open">
+                    <span>用其他方式注册：</span>
+                    <a href="" class="Juser_ipt_open_Btn Juser_ipt_open_wc"><i class="fa fa-weixin"></i>微信</a>
+                    <a href="" class="Juser_ipt_open_Btn Juser_ipt_open_qq"><i class="fa fa-qq"></i>扣扣</a>
+                    <a href="" class="Juser_ipt_open_Btn Juser_ipt_open_wb"><i class="fa fa-weibo"></i>微博</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="Juser_sign_right">
+            <h2>已经是{:config('web.sitetitle')}会员？</h2>
+            <h3><a href="{:url('index/index/login')}" class="btn btn-danger btn-sm">立马去登录</a></h3>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#keleyivisitorip').hide();
+        $('.cap').on('click', function () {
+                //更换验证码
+                $(this).find('img').attr('src', '/captcha.html?r=' + new Date().getTime());
+            });
+        $("#Juser_login_form").submit(function () {
+            var userName = $("#Juser_iptName"),
+                mailNode = $("#Juser_iptMail"),
+                pwdNode = $("#Juser_iptPwd"),
+                rpwdNode = $("#Juser_riptPwd"),
+                capt = $('#Juser_iptCap'),
+                Btn = $("#Juser_Sub_login"),
+                IP  = $('#keleyivisitorip');
+            if (userName.val() == "" || userName.val().length > 12) {
+                userName.focus();
+                JuserTips("昵称格式错误，1至12个字符");
+                return false;
+            }
+            if (!J.isMail(mailNode.val())) {
+                mailNode.focus();
+                JuserTips("邮箱格式错误");
+                return false;
+            }
+            if (!J.isPassWord(pwdNode.val())) {
+                pwdNode.focus();
+                JuserTips("密码格式错误，必须包含字母和数字，6至18位");
+                return false;
+            }
+            if(rpwdNode.val() != pwdNode.val() ){
+                pwdNode.focus();
+                JuserTips("两次输入的密码必须一致");
+                return false;
+            }
+            Btn.attr("disabled", true).fadeTo("slow", 0.5); //禁用点击按钮
+            $.ajax({
+                type: "POST",
+                url: "{:url('index/index/reg')}",
+                dataType: "json",
+                data: {
+                    "sname": userName.val(),
+                    "email": mailNode.val(),
+                    "pwd": pwdNode.val(),
+                    "rpwd": rpwdNode.val(),
+                    "capt": capt.val(),
+                    "ip" : IP.html(),
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        //注册成功  跳转至用户中心
+                        JuserTips(msg.info, 3, "success");
+                        setTimeout(function () {
+                            window.location.href = "{:url('index/index/login')}";
+                        }, 500);
+                        return false;
+                    } else if (msg.code == 500) {
+                        //刷新该页
+                        JuserTips(msg.info, 5);
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 6000);
+                        return false;
+                    } else if (msg.code == 400) {
+                        JuserTips(msg.info);
+                    } else {
+                        JuserTips(msg.info);
+                    }
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                },
+                error: function () {
+                    JuserTips("网络或服务器异常，请稍后再试");
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                }
+            });
+            return false;
+        });
+
+
+        /**
+         * 提示框Js方法
+         * text 提示文本
+         * time 提示显示时间
+         */
+        function JuserTips(text, time, status) {
+            var t = time || 3; //默认3s
+            var status = status || "error";
+            var tipsNode = $(".J_user_tips");
+            if (status == "error") {
+                tipsNode.removeClass("J_user_tips_success").addClass("J_user_tips_normal");
+            } else {
+                tipsNode.removeClass("J_user_tips_normal").addClass("J_user_tips_success");
+            }
+            tipsNode.empty().append(text).slideDown();
+            tipsTimeHandler = setTimeout(function () {
+                tipsNode.slideUp();
+            }, t * 1000);
+        }
+    });
+</script>
+{/block} {block name="right"} {/block}

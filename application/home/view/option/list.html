@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 参数设置</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-10 col-md-offset-1">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>参数设置</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="option" action="{:url('home/option/list')}" method="post">
+                         {volist name="ops" id="vo"}
+                          <div class="form-group" id="_{$vo.op_id}">
+                                <label class="col-sm-2 control-label">{$vo.op_name} *：</label>
+                                <div class="col-sm-7">
+                                            <div class="row">
+                                                {if condition="$vo.op_type eq 'input'"}<div class="col-sm-8"><input type="input" value='{$vo.op_value}' class="form-control" {if condition="$vo.op_ison eq '删除'"}disabled{/if} name="{$vo.op_id},{$vo.op_title}"/></div><label class="col-sm-1 control-label ">排序</label><div class="col-sm-2 "><input type="text" class="form-control" value="{$vo.op_sort}" name="sort[]"></div>
+                                            {elseif condition="$vo.op_type eq 'textarea'" /}
+                                                <div class="col-sm-8">
+                                                    <textarea {if condition="$vo.op_ison eq '删除'"}disabled{/if}  cols="30" rows="10" class="form-control" name="{$vo.op_id},{$vo.op_title}">{$vo.op_value}</textarea>
+                                                </div>
+                                                <label class="col-sm-1 control-label ">排序</label><div class="col-sm-2 "><input type="text" class="form-control" value="{$vo.op_sort}" name="sort[]"></div>
+                                            {else/}
+                                                <div class="col-sm-8"><label class="radio-inline">
+                                                    <input type="radio" {if condition="$vo.op_ison eq '删除'"}disabled{/if}  {if condition="$vo.op_value eq 1"}checked{/if} name="{$vo.op_id},{$vo.op_title}" value="1">{$vo.op_tips['0']}
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" {if condition="$vo.op_ison eq '删除'"}disabled{/if}  {if condition="$vo.op_value eq 0"}checked{/if} name="{$vo.op_id},{$vo.op_title}" value="0">{$vo.op_tips['1']}
+                                                </label>
+                                                </div><label class="col-sm-1 control-label ">排序</label><div class="col-sm-2 "><input type="text" class="form-control" value="{$vo.op_sort}" name="sort[]"></div>
+                                            {/if}
+                                            </div>
+                                            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>{$vo.op_title}</span>
+                                </div>
+                                <div class="col-sm-3">
+                                 {if condition="$vo.op_ison eq '删除'"}
+                                     <i class="fa fa-edit text-navy"><s>修改</s></i> &nbsp;&nbsp;
+                                     <i class="fa fa-trash-o text-danger"><s>删除</s></i> &nbsp;&nbsp;
+                                     <a href="javascript:unlockinfo({$vo.op_id})"><i class="fa fa-unlock text-info"></i> 启用</a>&nbsp;&nbsp;
+                                     {else}
+                                     <a href="edit/id/{$vo.op_id}"><i class="fa fa-edit text-navy"></i> 修改</a>&nbsp;&nbsp;
+                                    <a href="javascript:removeinfo({$vo.op_id});" ><i class="fa fa-trash-o text-danger">删除</i></a>&nbsp;&nbsp;
+                                    <i class="fa fa-unlock text-info"></i> <s>启用</s>&nbsp;&nbsp;
+                                 {/if}  
+                                </div>
+                            </div>
+                            {/volist}
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <span id="result">标记为*号的不能空</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                   <button id="sub" class="btn btn-primary s" type="submit" >保存</button>
+                                   <button id="clear" class="btn btn-primary " type="button" onclick="javascript:clearData();"><span id="s">清除多的资源</span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="__HOME__js/plugins/layer/layer.min.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+    <script type="text/javascript">
+      (function(){
+          var options = {success : showInfo};
+          $('#option').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "保存配置成功!",
+                        text: "您成功更新了配置,请刷新后查看",
+                        type: "success"
+                    },function(){
+                        //刷新当前页面
+                         window.location.reload();
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "保存配置文件失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }  
+      })();
+        function removeinfo(id){
+            layer.confirm('您确定要删除这条信息吗？',{
+                    btn:['确定','取消']
+                },function(){            
+                    $.post("{:url('home/option/del')}",{'id':id},function(msg){
+                        //console.log(data.status);
+                       if(msg.status == 1){
+                           layer.msg(msg.msg,{icon:1});
+                           $('#_'+id).empty();
+                       }else{
+                           layer.msg(data.msg,{icon:2});
+                       }
+                    },'json');
+                },function(){}
+            );
+        }
+        function unlockinfo(id){
+            layer.confirm('您确定要恢复这条信息吗？',{
+                    btn:['确定','取消']
+                },function(){            
+                    $.post("{:url('home/option/unlock')}",{'id':id},function(msg){
+                       if(msg.status == 1){
+                           layer.msg(msg.msg,{icon:1});
+                           var edit = $('#_'+id).find('.text-navy');
+                           edit.html('修改');
+                           edit.wrap("<a href='oedit/id/"+id+"'></a>");
+                           //删除
+                           var del = $('#_'+id).find('.text-danger');
+                           del.html('删除');
+                           del.wrap("<a href='javascript:removeinfo("+id+");'></a>");
+                           //恢复
+                           var unlock = $('#_'+id).find('.text-info');
+                           unlock.html('<s>启用</s>');
+                           unlock.parent().replaceWith("<i class='fa fa-unlock text-info'><s>启用</s></i> &nbsp;&nbsp;");
+                           //内容可编辑
+                           $('#_'+id).find('.col-sm-8').children().attr('disabled',false);
+                       }else{
+                           layer.msg(data.msg,{icon:2});
+                       }
+                    },'json');
+                },function(){}
+            );
+        }
+        function clearData(){
+            layer.confirm('您确定要进行操作资源操作嘛？',{
+                    btn:['确定','取消']
+                },function(){            
+                    $.post("{:url('home/option/clear')}",{'msg':'clear'},function(msg){
+                       if(msg.status == 1){
+                           layer.msg(msg.msg,{icon:1});
+                           window.location.reload();
+                       }else{
+                           layer.msg(data.msg,{icon:2});
+                       }
+                    },'json');
+                },function(){}
+            );
+        }
+    </script>
+</body>
+
+</html>

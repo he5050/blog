@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 修改更新日志</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H+">
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+     <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <style type="text/css">
+        .texta{
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-8 col-md-offset-2 animated fadeInRight">
+                <div class="mail-box-header">
+                    <div class="pull-right tooltip-demo">
+                        <a href="#" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="放弃"><i class="fa fa-times"></i> 放弃</a>
+                    </div>
+                    <a class="text-info" title="点击我刷新"><h2>修改更新日志</h2><i class="fa fa-refresh fa-spin"></i></a>
+                </div>
+                <div class="mail-box">
+ <div class="form-horizontal" >
+                    <div class="mail-body">
+
+                       
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">版本号:</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="{$res.up_version}" id="version" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">主要更新内容 :</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" value="{$res.up_main}" id="maincontent">
+                                </div>
+                            </div>
+                        
+</div>
+                    </div>
+
+                    <div class="mail-text h-200">
+                        <!--                        内容模块-->
+                        <div class="summernote" id="con" >
+                        {$res.up_content}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="mail-body text-right tooltip-demo">
+                        <button class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send" type="button" id="sub"><i class="fa fa-reply"></i> 保存</button>
+                        <button  class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/update/list')}'">返回</button>
+                    </div>
+                    <div class="clearfix"></div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+
+
+    <!-- iCheck -->
+    <script src="__HOME__js/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- SUMMERNOTE -->
+    <script src="__HOME__js/plugins/summernote/summernote.min.js"></script>
+    <script src="__HOME__js/plugins/summernote/summernote-zh-CN.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $('#sub').click(function(){
+                var content = $("#con").code();
+                var version = $('#version').val();
+                var maincontent = $('#maincontent').val();
+                var data = {
+                    id : "{$res.up_id}",
+                    version : version,
+                    content : content,
+                    maincontent : maincontent,
+                };
+                $.post("{:url('home/update/edit')}",data,function(msg){
+                    //接收返回结果
+                    if (msg.res == 1) {
+                        swal({
+                            title: "更新更新日志成功",
+                            text: "即将跳转到更新日志列表",
+                            type: "success"
+                        },function(){
+                            //刷新当前页面
+                             //window.location.reload();
+                            window.location.href="{:url('home/update/list')}";
+                        });
+                    } else {
+                         swal({
+                            title: "好像出了点什么问题!",
+                            text: "请您重新在试试",
+                            type: "warning",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "更新日志失败!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        });
+                    }
+                },'json');
+            });    
+            $('.summernote').summernote({
+                lang: 'zh-CN',
+                focus: true,
+            });
+        });
+        var edit = function () {
+            $('.click2edit').summernote({
+                focus: true
+            });
+        };
+        var save = function () {
+            var aHTML = $('.click2edit').code(); //save HTML If you need(aHTML: array).
+            $('.click2edit').destroy();
+        };
+    </script>
+
+</body>
+
+</html>

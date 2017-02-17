@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh">
+        <meta charset="utf-8">
+        <title>canvas的简单应用</title>
+        <style>
+            .canvas{
+                background-color: bisque;
+            }
+        </style>
+        <script src="/static/index/js/easeljs.js"></script>
+        <script>
+            var CANVAS_WIDTH = 500,CANVAS_HEIGHT = 500;
+            var mycanvas,context,stage,img,sprite;
+            window.onload = function(){
+                createCanvas();
+                //drawRect();
+                //drawImg();
+                //drawArc();
+                //drawLine();
+                //drawBe();
+            }
+            //创建画布
+            function createCanvas(){
+                //document.body.innerHTML = "<canvas id=\"myCanvas\" width=\""+CANVAS_WIDTH+"\" height=\""+CANVAS_HEIGHT+"\"></canvas>";
+                document.getElementById('can').innerHTML = "<canvas id=\"myCanvas\" width=\""+CANVAS_WIDTH+"\" height=\""+CANVAS_HEIGHT+"\"></canvas>";
+                mycanvas = document.getElementById("myCanvas");
+                context = mycanvas.getContext("2d");
+            }
+            //绘制图形
+            function drawRect(){
+                context.fillStyle = "#ccc";
+                context.fillRect(0,0,500,500);
+                //默认填充色为黑色
+                //旋转
+               // context.rotate(45);
+                //移动
+                //context.translate(100,100);
+                //缩放x y的等比缩放
+                //context.scale(2,0.3);
+                //context.fillRect(20,20,250,250);
+            }
+            //绘制图片
+            function drawImg(){
+                context.fillStyle = "#ccc";
+                context.fillRect(0,0,500,500);
+                var img = new Image();
+                img.onload = function(){
+                    context.drawImage(img,0,0);
+                }
+                img.src = "/static/images/default.jpg";
+            }
+            //绘画 圆形
+            function drawArc(){
+                context.fillStyle = "#eeeeef";
+                //绘一个正方形
+                context.fillRect(0,0,500,500);
+                for(var i=0;i<=10;i++){
+                    console.log(i);
+                    //开始绘画
+                    context.beginPath();
+                    //绘画圆 圆心的坐标 半径 起始位置 结束位置
+                    context.arc(i*15,i*15,i*8,0,Math.PI*2,true);
+                    context.ar
+                    //context.fillRect(i*2,i*2,i*20,i*20);
+                    //绘画结束关闭掉
+                    context.closePath();
+                    //设置圆的填充色 颜色与透明度
+                    context.fillStyle = "rgba(250,0,0,0.2)";
+                    //填充
+                    context.fill();
+                }
+            }
+            //绘制直线
+            function drawLine(){
+                var dx = 150,dy=150,s=100;//圆心的位置 直径
+                context.fillStyle = "#ccc";
+                context.fillRect(0,0,500,500);
+                context.beginPath();
+                context.fillStyle = "rgba(0,250,0,0.3)";
+                //设置图形边框的样式
+                context.strokeStyle = "rgba(0,0,100)";
+                //获取x y的坐标
+                var x = Math.sin(0);
+                var y = Math.cos(0);
+                var dig = Math.PI/15*11;
+                for(var i=0;i<30;i++){
+                    var x = Math.sin(i*dig);
+                    var y = Math.cos(i*dig);
+                    context.lineTo(dx+x*s,dy+y*s);
+                }
+                context.closePath();
+                context.fill();
+                context.stroke();
+            }
+            //贝塞尔曲线
+            function drawBe(){
+                var dx = 150,dy=150,s=100;//圆心的位置 直径
+                context.fillStyle = "#ccc";
+                context.fillRect(0,0,500,500);
+                context.beginPath();
+                context.fillStyle = "rgba(0,250,0,0.3)";
+                //获取x y的坐标
+                var x = Math.sin(0);
+                var y = Math.cos(0);
+                var dig = Math.PI/15*11;
+                context.moveTo(dx,dy);
+                for(var i=0;i<30;i++){
+                    var x = Math.sin(i*dig);
+                    var y = Math.cos(i*dig);
+                    //绘制贝塞尔曲线
+                    context.bezierCurveTo(dx+x*s,dy+y*s-100,dx+x*s+100,dy+y*s,dx+x*s,dy+y*s);
+                }
+                context.closePath();
+                context.fill();
+                context.stroke();
+            }
+            //旋转
+            function drawTran(){
+                context.fillStyle = "#eeeeef";
+                context.fillRect(0,0,500,500);
+                //移动
+                context.translate(200,50);
+                context.fillStyle = "rgba(255,120,11,0.3)";
+                for(var i=0;i<100;i++){
+                    //移动
+                    context.translate(25,25);
+                    //缩放
+                    context.scale(0.9,0.9);
+                    //旋转
+                    context.rotate(Math.PI/10);
+                    context.fillRect(0,0,180,80);
+                }
+                //context.fill();
+            }
+            //绘制渐变色
+            function drawLG(){
+                var g1 = context.createLinearGradient(0,0,0,500);
+                g1.addColorStop(0,"rgb(255,0,0)");
+                g1.addColorStop(1,"rgb(0,255,255)");
+                context.fillStyle = g1;
+                context.fillRect(0,0,500,500);
+                var g2 = context.createLinearGradient(0,0,300,0);
+                g2.addColorStop(0,"rgba(0,0,255,0.4)");
+                g2.addColorStop(1,"rgba(255,0,0,0.6)");
+                for(var i=0;i<10;i++){
+                    context.beginPath();
+                    context.fillStyle = g2;
+                    context.arc(i*15,i*15,i*10,0,Math.PI*2,true);
+                    context.closePath();
+                    context.fill();
+                }
+            }
+            //绘制径向
+            function drawRG(){
+                var g1 = context.createRadialGradient(400,0,0,400,0,400);
+                g1.addColorStop(0.1,"rgb(255,255,0)");
+                g1.addColorStop(0.3,"rgb(255,0,255)");
+                g1.addColorStop(1,"rgb(0,255,255)");
+                context.fillStyle = g1;
+                context.fillRect(0,0,500,500);
+            }
+            //绘制图形组合
+            function drawCO(i){
+                var oprtns = new Array(
+                    'source-atop',//
+                    'source-in',
+                    'source-out',
+                    'source-over',
+                    'destination-atop',
+                    'destination-in',
+                    'destination-out',
+                    'destination-over',
+                    'lighter',//重叠的区域加色处理
+                    'copy',
+                    'xor'//重叠的部分为空白的
+                );
+                context.fillStyle = "blue";
+                context.fillRect(10,10,60,60);
+                context.globalCompositeOperation = oprtns[i];
+                context.beginPath();
+                context.fillStyle = "red";
+                context.arc(60,60,30,Math.PI*2,false);
+                context.closePath();
+                context.fill();
+            }
+            //获取i 什么样的 模型
+            function getI(){
+                var i = prompt('请输入图形状态输入数字0到11','');
+                //判断是否为数据，如果不是就默认为 0
+                if(isNaN(i)){
+                    i = 0;
+                }else if(!Number.isInteger(i)){
+                    //判断是否为整数 默认向下取整
+                    i = Math.floor(i);
+                }
+                drawCO(i);
+            }
+            //绘制五角星
+            function create5Star(context){
+                var dx = 100,dy = 0,s=50;
+                context.beginPath();
+                context.fillStyle = "rgba(255,50,50,0.6)";
+                var x = Math.sin(0);
+                var y = Math.cos(0);
+                var dig = Math.PI/5*4;
+                //几边
+                for(var i=0;i<5;i++){
+                    var x = Math.sin(i*dig);
+                    var y = Math.cos(i*dig);
+                    context.lineTo(dx+x*s,dy+y*s);
+                }
+                context.closePath();
+            }
+            //绘制阴影
+            function drawYY(){
+                context.fillStyle = "#eeeeef";
+                context.fillRect(0,0,500,500);
+                //设置偏移量 就是阴影的偏移
+                context.shadowOffsetX = 20;
+                context.shadowOffsetY = 50;
+                //设置颜色
+                context.shadowColor = "rgba(100,100,100,0.5)";
+                //模糊程度
+                context.shadowBlur = 7.5;
+                context.translate(0,50);
+                //绘制多少个
+                for(var i=0;i<3;i++){
+                    context.translate(80,80);
+                    create5Star(context);
+                    context.fill();
+                }
+            }
+            //使用createJs 创建
+            function drawStar(){
+                //创建舞台
+                stage = new createjs.Stage(mycanvas);
+                //添加监听事件 鼠标移动  鼠标点击事件
+                stage.addEventListener("stagemousedown",clickCanvas);
+                stage.addEventListener("stagemousemove",moveCanvas);
+                //定义数据序列
+                var data = {
+                    images : ['/static/images/2.png'],//引入图片的位置
+                    frames : {width:20,height:20,regX:10,regY:10}//变化方式 宽 高 ,变化的区域以中心点变化
+                }
+                //定义 承载
+                sprite = new createjs.Sprite(new createjs.SpriteSheet(data));
+                //什么情况下改变
+                createjs.Ticker.setFPS(20);
+                //创建监听事件
+                createjs.Ticker.addEventListener("tick",tick);
+            }
+            function tick(e){
+                //获取到每个星星的数量
+                var t = stage.getNumChildren();
+                console.log(t);
+                for(var i=t-1;i>0;i--){
+                    //获取当前的星星对象
+                    var s = stage.getChildAt(i);
+                    //每个星得出现的位置
+                    s.vY +=2;
+                    s.vX +=1;
+                    s.x += s.vX;
+                    s.y += s.vY;
+                    //下落的曲线 与缩放
+                    s.scaleX = s.scaleY = s.vS+s.scaleX;
+                    s.alpha += s.vA;
+                    //console.log(s.alpha);
+                    //清除如果下落结束 或是透明为0
+                    if(s.alpha <=0 || s.y>=mycanvas.height){
+                        stage.removeChildAt(i);
+                    }
+                }
+                stage.update(e);
+            }
+            function clickCanvas(e){
+                addS(Math.random()*10+10,stage.mouseX,stage.mouseY,2);
+            }
+            function moveCanvas(e){
+                addS(Math.random()*10+1,stage.mouseX,stage.mouseY,1);
+            }
+            //星星的数量 坐标 与速度
+            function addS(count,x,y,speed){
+                for(var i=0;i<count;i++){
+                    //获取每一个实例对象 使有clone方法 相当于 每个星星 都一个实例
+                    var s = sprite.clone();
+                    //星星的 x y
+                    s.x = x;
+                    s.y = y;
+                    //设置 透明度 
+                    s.alpha = Math.random()*0.5 + 0.5;
+                    //缩放
+                    s.scaleX = s.scaleY = Math.random() + 0.3;
+                    //设置 下落的 曲线
+                    var a = Math.PI *2 + Math.random();
+                    //星星得下落的速度
+                    var v = (Math.random() - 0.5)*30*speed;
+                    //设置哪 边下落快一点
+                    s.vX = Math.cos(a)*v;
+                    s.vY = Math.sin(a)*v;//下落星星的x y的变化
+                    s.vS = (Math.random()-0.5)*0.2;//缩放的变化
+                    s.vA = -Math.random()*0.05 - 0.01;//曲线的变化
+                    //添加到舞台当中
+                    stage.addChild(s);
+                }
+            }
+        </script>
+    </head>
+    <body>
+<!--        <canvas class="canvas" width="500" height="500"></canvas>-->
+   <div id="can"></div>
+   <button onclick="drawRect()">绘制图形</button>
+   <button onclick="drawImg()">绘制图片</button>
+   <button onclick="drawArc()">绘制圆形</button>
+   <button onclick="drawLine()">绘制直线</button>
+   <button onclick="drawBe()">绘制贝塞尔曲线</button>
+   <button onclick="drawTran()">绘制旋转图形</button>
+   <button onclick="drawLG()">绘制线性渐变图形</button>
+   <button onclick="drawRG()">绘制径向渐变图形</button>
+   <button onclick="getI()">绘制图形组合</button>
+   <button onclick="drawYY()">绘制带阴影的五角星</button>
+   <button onclick="drawStar()">createJs的使用</button>
+    </body>
+</html>

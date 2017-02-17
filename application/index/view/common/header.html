@@ -1,0 +1,56 @@
+    <header class="header">
+        <div class="container">
+            <div class="top">
+                <h1 class="logo"><a href="{:config('web.siteurl')}">{:config('web.sitetitle')}</a></h1>
+                <div class="des">{:config('web.sitedes')}</div>
+                <nav class="nav">
+                    <ul class="nav_list">
+                      <li class="item items" data-items="1">
+                            <a href="{:config('web.siteurl')}" class="current">首页</a>
+                        </li>
+                       {volist name="cates" id="vo1"}
+                           {if condition="($vo1.lev eq 0) AND ($vo1.c_isshow eq 1)"}
+                            <li class="item items" data-items="{$auto++}">
+                                <a href="{:url('index/index/cate',['c'=>$vo1.id])}" class="common">{$vo1.c_name}{if condition=" $vo1.c_isparent eq 1"}<i class="fa fa-angle-down"></i>{/if}</a>
+                                {if condition=" $vo1.c_isparent eq 1"}
+                                    <ul class="navChirld">
+                                    {volist name="cates" id="vo2"}
+                                        {if condition="$vo2.p_id eq $vo1.id"}                                        
+                                            <li class="itemChirld"><a href="{:url('index/index/cate',['c'=>$vo2.id])}" class="commonChirld">{$vo2.c_name}</a></li>
+                                        {/if}
+                                    {/volist}
+                                     </ul>
+                                {/if}
+                            </li> 
+                           {/if}
+                       {/volist}
+                        <i class="pointer pointer1" data-length="{--$auto}" data-now="1"></i>
+                    </ul>
+                </nav>
+            </div>
+            <div class="mininav">
+                <div class="topsign">
+                    <?php
+                        $u = session('u_status');
+                        $str = '';
+                        if($u){
+                            $str = "<span class='J_sign_wellcome'>欢迎您: ".session('u_sname')."</span><span><a href='".url('index/center/center')."' class='J_sign_usercenter'>会员中心</a></span><span><a href='".url('index/index/out')."' class='J_sign_out'>[退出]</a></span>";
+                        }else{
+                            $str = "<span id='Juser_login_node'><a href='".url('index/index/login')."' class='J_Unsign_login'>Hi 游客，请登录</a></span><span id='Juser_register_node'><a href='".url('index/index/reg')."'  class='J_Unsign_register'>我要注册</a></span>";
+                           
+                        }
+                         echo $str;
+                    ?>
+                    
+                </div>
+                
+                <ul class="mini">
+                    <li><a class="red" target=_blank><i class="fa fa-weixin"></i> {:config('web.siteweixin')}</a></li>
+                    <li><a href="{:url('index/info/me')}"> 关于嘿嘿</a></li>
+                    <li><a href="" class="green"><i class="fa fa-qq"></i> {:config('web.siteqq')}</a></li>
+                    <li class="top_mininav_end"><a href="{:config('web.sitweibo')}" target=_blank><i class="fa fa-weibo"></i> 新浪微博</a></li>
+                    <!--li class="top_mininav_end"><a href="" target=_blank><i class="fa fa-tencent-weibo"></i> 腾讯微博</a></li--></ul>
+            </div>
+            <button class="mini_nav_btn"><i class="fa fa-navicon"></i></button>
+        </div>
+    </header>

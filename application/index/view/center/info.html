@@ -1,0 +1,152 @@
+{extend name="center/base" /} 
+{block name="title"}个人信息{/block}
+{block name="main"}
+<div class="J_UserCenter_Content">
+    <h3 class="J_UserCenter_title">修改个人资料<em>{:config('web.sitetitle')}即将启用邮箱验证，请使用您的真实邮箱</em></h3>
+    <div class="J_UserCenter_wrap">
+        <form method="get" class="form" autocomplete="off" action="">
+            <div class="form-group">
+                <label for="time">注册时间：<em>{$info.u_regtime|date="Y-m-d H:i:s",###}</em></label>
+            </div>
+            <div class="form-group">
+                <label for="name">昵称 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" id="name" placeholder="请输入您的昵称" value="{:session('u_sname')}">
+            </div>
+            <div class="form-group">
+                <label for="mail">邮箱 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" id="mail" placeholder="请输入您的邮箱" value="{:session('u_email')}">
+            </div>
+            <div class="form-group">
+                <label for="url">网址</label>
+                <input type="text" class="form-control" id="url" placeholder="请输入您的网址" value="{:session('url')}">
+            </div>
+            <div class="form-group">
+                <label for="sex">性别</label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="sex" class="sex" value="1" {if condition="$info.u_gender eq 1" }checked="checked" {/if}>汉子</label>
+                <label>
+                    <input type="radio" name="sex" class="sex" value="0" {if condition="$info.u_gender eq 0" }checked="checked" {/if}>妹子</label>
+            </div>
+            <div class="form-group">
+                <label for="phone">手机 <span><i class="fa fa-asterisk"></i></span></label>
+                <input type="text" class="form-control" id="phone" placeholder="请输入您的手机" value="{$info.u_mobile}">
+            </div>
+            <div class="form-group">
+                <label for="motto">签名</label>
+                <textarea class="form-control" id="motto" placeholder="请输入您的个性签名，64字以内" rows="3">{$info.u_motto}</textarea>
+            </div>
+            <div class="form-group">
+                <p><span><i class="fa fa-asterisk"></i></span> 表示必填项~</p>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="form-control btn btn-info" id="sub" value="提交修改">
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".form").submit(function () {
+            var userName = $("#name"),
+                mailNode = $("#mail"),
+                urlNode = $("#url"),
+                phoneNode = $("#phone"),
+                mottoNode = $("#motto"),
+                Btn = $("#sub");
+            if (userName.val() == "" || userName.val().length > 12) {
+                userName.focus();
+                JuserTips("昵称格式错误，1至12个字符");
+                return false;
+            }
+            if (!J.isMail(mailNode.val())) {
+                mailNode.focus();
+                JuserTips("邮箱格式错误");
+                return false;
+            }
+            if (urlNode.val() != "" && !J.isUrl(urlNode.val())) {
+                urlNode.focus();
+                JuserTips("网址格式错误");
+                return false;
+            }
+            if(phoneNode.val() == ""){
+              phoneNode.focus();
+                JuserTips("手机号必须填写");
+                return false;  
+            }
+            if (phoneNode.val() != "" && !J.isPhone(phoneNode.val())) {
+                phoneNode.focus();
+                JuserTips("手机号格式错误");
+                return false;
+            }
+            if (mottoNode.val() != "" && mottoNode.val().length > 64) {
+                mottoNode.focus();
+                JuserTips("签名字符长度不得超过64字");
+                return false;
+            }
+            Btn.attr("disabled", true).fadeTo("slow", 0.5); //禁用点击按钮
+            $.ajax({
+                type: "POST",
+                url: "{:url('index/center/info')}",
+                dataType: "json",
+                data: {
+                    "nick": userName.val(),
+                    "mail": mailNode.val(),
+                    "url": urlNode.val(),
+                    "phone": phoneNode.val(),
+                    "sex": $(".sex:checked").val(),
+                    "motto": mottoNode.val()
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        JuserTips(msg.info, 3, "修改成功");
+                        // return false;
+                    } else if (msg.code == 500) {
+                        //刷新该页
+                        JuserTips(msg.info, 5);
+                        setTimeout(function () {
+                            window.location.reload(true);
+                        }, 6000);
+                        return false;
+                    } else if (msg.code == 400) {
+                        JuserTips(msg.info);
+                    } else {
+                        JuserTips(msg.info);
+                    }
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                },
+                error: function () {
+                    JuserTips("网络或服务器异常，请稍后再试");
+                    Btn.attr("disabled", false).fadeTo("slow", 1); //再次启用点击按钮
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 提示框Js方法
+         * text 提示文本
+         * time 提示显示时间
+         */
+        function JuserTips(text, time, status) {
+            var t = time || 3; //默认3s
+            var status = status || "error";
+            var tipsNode = $(".J_user_tips");
+            tipsNode.css({
+                "position": "fixed",
+                "top:": 0
+            });
+            if (status == "error") {
+                tipsNode.removeClass("J_user_tips_success").addClass("J_user_tips_normal");
+            } else {
+                tipsNode.removeClass("J_user_tips_normal").addClass("J_user_tips_success");
+            }
+            tipsNode.empty().append(text).slideDown();
+            tipsTimeHandler = setTimeout(function () {
+                tipsNode.slideUp();
+            }, t * 1000);
+        }
+    });
+</script>
+{/block}

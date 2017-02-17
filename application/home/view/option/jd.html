@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>H+ 添加首页焦点图片</title>
+    <meta name="keywords" content="H+">
+    <meta name="description" content="H">
+
+    <link rel="shortcut icon" href="__HOME__favicon.ico">
+    <link href="__HOME__css/bootstrap.min.css" rel="stylesheet">
+    <link href="__HOME__css/font-awesome.css" rel="stylesheet">
+    <link href="__HOME__css/animate.css" rel="stylesheet">
+    <link href="__HOME__css/style.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__HOME__css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-10 col-md-offset-1">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <a class="text-info" title="点击我刷新"><h5>添加首页焦点图片</h5><i class="fa fa-refresh fa-spin"></i></a>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="form_basic.html#">选项1</a>
+                                </li>
+                                <li><a href="form_basic.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="jd" action="{:url('home/option/jd')}" method="post" enctype="multipart/form-data">
+                          <div class="form-group jd">
+                                <label class="col-sm-1 control-label">首页焦点图：</label>
+                                <div class="col-sm-10">
+                                    <span id="add">
+                                    <input id="images1" name="images[]" class="form-control up" type="text" readonly="readonly">
+                                    <input id="link1" name="link[]" class="form-control up" value="" type="text" placeholder="http://">
+                                    <input id="content1" name="content[]" class="form-control up" value="" type="text" placeholder="写点介绍吧!">
+                                    </span>
+                                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i>配图</span>
+                                    <div class="shade" onclick="javascript:closeShade()">
+                                        <div class="">
+                                            <span class="text_span"></span>
+                                        </div>
+                                    </div>
+                                    <div class="shadeImg" onclick="javascript:closeShadeImg()">
+                                        <div class="">
+                                            <img class="showImg" src="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="btn btn-primary" id="dropz" ><span class="fa fa-upload"></span>上传文件</div>
+                                </div>
+                                <div class="col-sm-10 col-md-offset-1">
+                                    <div class="img_div">
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button id="sub" class="btn btn-primary " type="submit"><span id="s">提交</span></button>
+                                    <button  class="btn btn-primary" type="button" onclick="window.location.href='{:url('home/option/jdList')}'">返回</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- 全局js -->
+    <script src="__HOME__js/jquery.min.js"></script>
+    <script src="__HOME__js/bootstrap.min.js"></script>
+
+    <!-- 自定义js -->
+    <script src="__HOME__js/content.js"></script>
+    <script src="__HOME__js/plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- jQuery Validation plugin javascript-->
+    {js href="__INDEX__js/jlib.js"}
+    <script src="__HOME__js/dropzone.js"></script>
+    {js href="__HOME__js/jquery.form.js" /}
+<script type="text/javascript">
+//  Dropzone.autoDiscover = false;
+//  Dropzone.options.myAwesomeDropzone = false;
+    var id = 1; //定义初始化id
+    $('#dropz').dropzone({
+            url: "{:url('home/option/upjd')}",
+            params:{"f_type":"article"},
+            paramName:'images',//相当于元素的name属性，默认为file。
+            maxFiles: 20,//最多接收的上传文件为
+            maxFilesize: {:config('upload.size')},//最大上传文件的大小单位是mb
+            addRemoveLinks:true,//是否给文件添加一个删除链接
+            dictRemoveFile:'删除',//移动文件连接的文本
+            autoDiscover:false, //自动发现
+            //createImageThumbnails:false,
+            previewTemplate:'<div id="preview-template" style="display: none;"></div>',
+            //acceptedFiles: ".gif,.jpg,.png,.pdf,.doc,.xls,.ppt,.docx,.xlsx,.pptx",//允许上传文件的类型
+            acceptedFiles: ".gif,.jpg,.png",
+            init: function() {
+                this.on("success", function(file,response) {
+                    if(response.status == 1){
+                        //console.log(response.url);
+                        $("#images"+id).val(response.url);
+                        //$("#newimage").attr('src',response.url);
+                        //定义显示图片
+                        img_html = "<div class='isImg' id="+id+"><img src='" + response.url + "' onclick='javascript:lookBigImg(this);' style='height: 120px; width: 120px;margin-top:5px;' /><button class='removeBtn' onclick='javascript:removeImg(this);return false;' value='删除'>x</button></div>";
+                        id +=1;
+                        //定义输入框
+                        input_html = "<input id='images"+id+"' name='images[]' class='form-control up' type='text' readonly='readonly'> <input id='link"+id+"' name='link[]' class='form-control up' value='' type='text' placeholder='http://'> <input id='content"+id+"' name='content[]' class='form-control up'  type='text' placeholder='写点介绍吧!'>";
+//                        $(".img_div").find('div').remove();
+//                        $(".help-block").removeClass('text-danger');
+//                        $(".help-block").addClass('text-info');
+//                        $(".help-block").html("<i class='fa fa-info-circle'></i>配图");
+                            $('#add').append(input_html);
+                        $(".img_div").append(img_html);
+                        //console.log("File: " + file.name + " uploaded,Detail: " + response);
+                    }
+                });
+                this.on("removedfile", function(file) {
+                    //console.log("File " + file.name + "removed");
+                });
+            }
+	   });
+    //在这里遇到一个问题 就是点击删除的时候 会自动刷新页面,所有我在后面加了一个 return false;关于这个bug问题还没有发现是由什么引起的
+    function removeImg(r) {
+        swal({
+          title: "您确定要删除?",
+          text: "该操作是不可逆,请您在考虑一下",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, 我确定删除!",
+          cancelButtonText: "No, 让我在考虑一下!",
+          closeOnConfirm: false,
+          allowOutsideClick:true,
+        },
+        function(){
+          swal({
+                title: "你铁了心要删除嘛?",
+                text: "请您做出重要的选择",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, 直接删除!",
+                cancelButtonText: "No, 我回心转意了!",
+                closeOnConfirm: false,
+                allowOutsideClick:true,
+                //closeOnCancel: false
+            },
+            function(){
+              //alert('111');
+                var parent = $(r).parent();
+                var thisid = parent.attr('id'); 
+                parent.remove();
+                $("#images"+thisid).remove();
+                $("#link"+thisid).remove();
+                swal("删除成功!", "您可以选择重新添加", "success");
+            });
+        });    
+        }
+    function lookBigImg(b) {
+        $(".shadeImg").fadeIn(500);
+        $(".showImg").attr("src", $(b).attr("src"))
+    }
+
+    function closeShade() {
+        $(".shade").fadeOut(500);
+    }
+
+    function closeShadeImg() {
+        $(".shadeImg").fadeOut(500);
+    }
+    //表单提交
+    (function(){
+          var options = {success : showInfo,beforeSubmit:validate};
+          $('#jd').ajaxForm(options);
+          function showInfo(msg){
+             if(msg.status == 1){
+                    swal({
+                        title: "添加焦点成功",
+                        text: "即将跳转到焦点列表",
+                        type: "success"
+                    },function(){
+                        //刷新当前页面
+                         //window.location.reload();
+                        window.location.href="{:url('home/option/jdList')}";
+                    });
+                }else{
+                   swal({
+                        title: "好像出了点什么问题!",
+                        text: "请您重新在试试",
+                        type: "warning",
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "添加焦点图失败!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    });
+                }
+          }
+        //提交前的验证
+          function validate(fomData,jqForm,options){
+              //给最后一行添加为disabled
+              //$("input[name='images[]']:last").attr('disabled',true);
+              //$("input[name='link[]']:last").attr('disabled',true);
+              //获取的链接
+              var images = $("input[name='images[]']").fieldValue().pop();
+              var link = $("input[name='link[]']").fieldValue().pop();
+              
+              for(x in images){
+                  if(images[x] == ''){
+                      swal({
+                          title: "请上传图片",
+                          text: "图片信息为空",
+                          timer: 3000,
+                          type: "warning",
+                          showConfirmButton: false
+                        });
+                        return false;
+                  }
+              }
+              for(x in link){
+                  if(link[x] != ''){
+                      if(!J.isUrl(link[x])){
+                      swal({
+                          title: "请填写正确的url",
+                          text: "格式如下:http:// https://,当然您也可以空着不填写",
+                          timer: 3000,
+                          type: "warning",
+                          showConfirmButton: false
+                        });
+                        return false;
+                  }
+                  }
+              }
+          }
+      })();
+    </script>
+
+</body>
+
+</html>

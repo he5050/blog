@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh">
+        <meta charset="utf-8">
+        <title>web页面存储</title>
+        <script>
+            var ta,btn,addbtn,numDiv,txt,timer;
+            var num = 0,num1 = 0,delay=100;
+            window.onload = function(){
+                ta = document.getElementById("ta");
+                btn = document.getElementById("btn");
+                addbtn = document.getElementById("addbtn");
+                numDiv = document.getElementById("numDiv");
+                txt = document.getElementById("txt");
+                str = document.getElementById("start");
+                stp = document.getElementById("stop");
+                //sessionStorage只会存放当前会话的数据
+                if(sessionStorage.num1){
+                    num1 = sessionStorage.num1;
+                    numDiv.innerHTML = num1;
+                }else{
+                    num1 = 0;
+                }
+                //永久保存
+                if(localStorage.name){
+                    //如果有数据就把本地存放的数据取出来
+                    ta.value = localStorage.name;
+                }
+                //永久保存到本地
+                btn.onclick = function(){
+                    alert(ta.value);
+                    //本地存储
+                    localStorage.name = ta.value;
+                }
+                //不保存
+                addbtn.onclick = function(){
+                    num++;
+                    showNum(txt);
+                }
+                //使用session保存当前会话当中
+                str.onclick = function(){
+                    start(addNum,delay);
+                }
+                stp.onclick = function(){
+                    stop(timer);
+                }
+            }
+            //显示与替换
+            function showNum(obj){
+                obj.innerHTML = num;
+            }
+            function addNum(){
+                num1 ++;
+               numDiv.innerHTML = num1;
+                sessionStorage.num1 = num1;
+                console.log(num1);
+            }
+            function start(cod,delay){
+                timer = setInterval(cod,delay);
+            }
+            function stop(timer){
+                timer = clearInterval(timer);
+            }
+        </script>
+    </head>
+    <body>
+       <h2>使用localStorage</h2>
+        <textarea  id="ta" cols="30" rows="10"></textarea>
+        <button id="btn">save</button>
+        <hr>
+        <br>
+        <h2>使用sessionStorage</h2>
+        <div id="numDiv">0</div>
+        <button id="start">start</button>
+        <button id="stop">stop</button>
+        <hr>
+        <br>
+        <h2>不使用localStorage</h2>
+        <span id="txt">0</span>
+        <button id="addbtn">add</button>
+        
+    </body>
+</html>

@@ -1,0 +1,38 @@
+{extend name="info/base" /}{block name="title"}读者墙{/block}{block name="main"}
+<div class="page_content_container">
+    <header class="page_header">
+        <h1><a href="{:url('index/info/reader')}">读者墙</a></h1></header>
+    <article class="page_content article_content">
+    </article>
+
+    <div class="page_reader clearfix">
+       {volist name='reader' id="re"}
+        {if condition="$i eq 1"}
+            <a href="{$re.cm_url}" target="_blank" class="page_reader_avatar page_reader_top page_reader_top_1">
+                <h4>状元读者<em>评论:{$re.num}</em></h4>
+                <div class="page_reader_top_wrap"><img src="__INDEX__{$re.cm_icon}" data-src="__INDEX__{$re.cm_icon}">
+                    <h5>{$re.cm_name}</h5><h6>{$re.cm_url}</h6>
+                </div>
+            </a>
+        {elseif condition="$i eq 2"/}
+            <a href="{$re.cm_url}" target="_blank" class="page_reader_avatar page_reader_top page_reader_top_2">
+            <h4>榜眼读者<em>评论:{$re.num}</em></h4>
+                <div class="page_reader_top_wrap"><img src="__INDEX__{$re.cm_icon}" data-src="__INDEX__{$re.cm_icon}">
+                    <h5>{$re.cm_name}</h5><h6>{$re.cm_url}</h6>
+                </div>
+            </a>
+        {elseif condition="$i eq 3"/}
+          <a href="javascript:;" target="_blank" class="page_reader_avatar page_reader_top page_reader_top_3">
+            <h4>探花读者<em>评论:{$re.num}</em></h4>
+            <div class="page_reader_top_wrap"><img src="__INDEX__{$re.cm_icon}" data-src="__INDEX__{$re.cm_icon}">
+                <h5>{$re.cm_name}</h5><h6>{$re.cm_url}</h6>
+            </div>
+            </a>
+        {else /}
+            <a href="{$re.cm_url}" class="page_reader_avatar page_reader_list" target="_blank" title="第{$i}名({$re.num}条评论)"><img src="__INDEX__{$re.cm_icon}" data-src="__INDEX__{$re.cm_icon}">
+            <h6>{$re.cm_name}</h6></a>
+        {/if}
+        {/volist}
+    </div>
+</div>
+{/block}

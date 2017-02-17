@@ -1,0 +1,46 @@
+{extend name="layout" /} 
+{block name="title"}twitter{/block}
+{block name="content"}
+<div class="content ar_content t_content">
+    <div class="twitter_content">
+        <h2 class="content_catag_title isCatag font_title">{$twitter.c_name}</h2>
+        <p>{$twitter.c_info|default='这人太懒了,什么都没有写'}</p>
+        <div class="article_position">
+            <i><img src="__INDEX__/images/top.png">您的位置：</i><a href="{:config('web.siteurl')}" title="{:config('web.sitetitle')}">{:config('web.sitetitle')}</a><small>&gt;&gt;</small>{$twitter.c_name}
+        </div>
+    </div>
+    <h2 class="content_title font_title twiter_title">最新{$twitter.c_name}</h2>
+    <ul class="twiter">
+        {volist name="twitters" id="tws"}
+        <li class="twiter_list">
+           <img src="__INDEX__{$tws.u_icon}" alt="{$tws.u_sname}" class="twiter_avatar">
+            <p class="twiter_content">{$tws.tw_content}</p>
+            {if condition="$tws.tw_img neq ''"}
+                <p class="twiter_img">
+                    <a title="查看图片" href="{$tws.tw_img}" target="_blank"><img lay-src="{$tws.tw_img}" alt="微语配图"></a>
+                </p>
+            {/if}
+            <p class="twiter_info"><span class="twiter_author">{$tws.u_sname}</span>
+                <time class="twiter_time"><i class="fa fa-clock-o"></i> {:timeago($tws.tw_createtime)}</time><span class="twiter_reply_btn"><i class="fa fa-reply-all"></i> <a href="javascript:loadr({$tws.tw_id});">回复(<span id="rn_{$tws.tw_id}">{$tws.tw_comment}</span>)</a>
+                </span>
+            </p>
+            <div class="huifu" id="rp_{$tws.tw_id}">
+                <ul id="r_{$tws.tw_id}" class="r twiter_chirldren"></ul>
+                <p class="msg"><span id="rmsg_{$tws.tw_id}">回复{$twitter.c_name}：</span></p>
+                <div class="twiter_reply_ipt_area">
+                    <textarea id="rtext_{$tws.tw_id}" placeholder="说点什么吧~" title="说点什么吧~"></textarea>
+                </div>
+                <p class="tinfo">
+                    <font style="display:">
+                        <span class="twiter_reply_ipt_name">昵称：<input type="text" id="rname_{$tws.tw_id}" value="{:session('u_sname')}" readonly="readonly"></span>
+                        <span class="twiter_reply_ipt_code" style="display:none">验证码：<input type="text" id="rcode_219" value=""></span>
+                    </font>
+                    <button class="button_p" type="button" onclick="javascript:reply('{$tws.tw_id}');"><i class="fa fa-check-circle-o"></i> 提交回复</button>
+                </p>
+            </div>
+        </li>
+        {/volist}
+    </ul>
+    <div class="page article_exp_page">{$twitters->render()}</div>
+</div>
+{/block}
