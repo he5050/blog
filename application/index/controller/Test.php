@@ -56,7 +56,13 @@ class Test  extends Controller
     public function layout(){
     	return view();
     }
-    public function ldd(){
-    	
+    public function cssTag(){
+    	return view();
+    }
+    public function jqui(){
+    	return view();
+    }
+    public function agapp1(){
+    	return view();
     }
 }

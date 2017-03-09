@@ -583,3 +583,11 @@ function getDoc($arr,$key){
         curl_close($ch);
         return $output;
     }
+function getRes($old,$now,$day){
+    $diff = $old - $now;
+    if($diff >= $day){
+        return true;
+    }else{
+        return false;
+    }
+}

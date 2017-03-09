@@ -144,4 +144,6 @@ return [
     'style'   => 'index/test/style',
     'cataract' => 'index/test/cataract',
     'layout'   => 'index/test/layout',
+    'csstag'  => 'index/test/cssTag',
+    'jqui'    => 'index/test/jqui',
 ];

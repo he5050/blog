@@ -24,7 +24,7 @@ class Base extends Controller
     public function top()
     {
         //查询分类信息
-        $cates = db('category')->order('c_sort')->select();
+        $cates = db('category')->order('c_sort')->cache(true)->select();
         $cates = getSort($cates);
         //查询最新的图片
         $this->assign(array(

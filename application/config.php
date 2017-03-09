@@ -17,7 +17,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => false,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -111,7 +111,7 @@ return [
     // 表单pjax伪装变量
     'var_pjax'               => '_pjax',
     // 是否开启请求缓存 true自动缓存 支持设置请求缓存规则
-    'request_cache'          => false,
+    'request_cache'          => true,
     // 请求缓存有效期
     'request_cache_expire'   => null,
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>JQUI</title>
+		{css href="__INDEX__css/jquery-ui.min.css"}
+		{css href="__INDEX__css/jquery-ui.theme.min.css"}
+		{css href="__INDEX__css/jquery-ui.structure.min.css"}
+		<style type="text/css">
+			.div01{
+				margin-top: 5px;
+				width: 100px;
+				height: 100px;
+				border: 2px solid #FF0066;
+			}
+			.div02{
+				margin-top: 5px;
+				width: 300px;
+				height: 300px;
+				border: 2px solid #FF4500;
+			}
+			ul{
+				list-style: none;
+			}
+			.ui-selected{
+				background-color: #009966;
+			}
+			.div04{
+				margin-top: 10px;
+				position: relative;
+				width: 200px;
+				height: 300px;
+				background-color: snow;
+			}
+		</style>
+	</head>
+	<body>
+		<a href="javascript:;" id="a_btn">我是按钮</a>
+		<div class="div01">
+			
+		</div>
+		<div class="div02">
+			
+		</div>
+		<ul class="ul01">
+			<li>A.1111</li>
+			<li>B.2222</li>
+			<li>C.3333</li>
+		</ul>
+		<div class="div03">
+			<h3>选项1</h3>
+			<div>
+				<p>
+					我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1
+				</p>
+			</div>
+			<h3>选项2</h3>
+			<div>
+				<p>
+					我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1
+				</p>
+			</div>
+			<h3>选项3</h3>
+			<div>
+				<p>
+					我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1
+				</p>
+			</div>
+			<h3>选项4</h3>
+			<div>
+				<p>
+					我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1我是内容1
+				</p>
+			</div>
+		</div>
+		<div class="div04">
+			<label for="tags">Tags</label>
+			<input type="" name="tags" id="tags" value="" />
+		</div>
+		<div class="div04 dialog">
+			<p>这是一个对话框</p>
+		</div>
+		<div class="div04 datepicker">
+			<p><input type="text" name="" id="datepicker" value="" /></p>
+		</div>
+		<div id="main">
+			<div class="content">
+				<div id="head">
+					<p>helo word</p>
+					<p>helo word</p>
+					<p>helo word</p>
+					<p>helo word</p>
+					<p>helo word</p>
+					<p>helo word</p>
+				</div>
+			</div>
+		</div>
+		<script src="__INDEX__js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="__INDEX__js/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+			$(document).ready(function(){
+				var autotags = ['html','html5','css','js','javascript']
+				$("#a_btn").button();//设置为按钮
+				$(".div01").draggable();//可以拖动
+				$(".div02").droppable();//不可以拖动
+				//设置拖动事件
+				$(".div02").on('drop',function(event,ui){
+					console.log(event);
+					$(".div02").text("drop事件");
+				});
+				$(".div01").resizable();//设置为可以调整大小
+				//$(".ul01").selectable();//选择某一个li出现选择
+				$(".ul01").sortable();//设置为可以上下移动的li
+				$(".div03").accordion();//设置风琴效果
+				$("#tags").autocomplete({
+					source:autotags
+				});
+				//$(".dialog").dialog();//设置对话框
+				$("#datepicker").datepicker();
+			})
+			/**
+ 			* 3、7、9整除 最小公倍数 是63
+ 			* 除以5，余数得4，所以尾数只能是9
+			* 除以6余数得3，因为63除以6余数得3，所以是63的奇数倍
+			* 上面说了尾数要是9嘛 所以结果就是63*(10x+3)
+			* 2、4、8的最小公倍数就是8,63除8余7,现在只要使用(10x+3)除8能满足余数为7就可以了
+			* 发现23，63，103除8余数为7结果就是(40x+23)
+			* 所以最后结查就是63*(40x+23) X从0开始
+			* 最后简化一下就是
+			* 2520i+1449 < =num
+			*/
+			var nowNum;
+			var i=0;
+			function getNum(num){
+				nowNum = 63*(40*i+23);
+				if(nowNum <= num){
+					console.log(nowNum);
+					i++
+					getNum(num);
+				}else{
+					return false;
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>选项卡</title>
+		<style type="text/css">
+			ul,li{
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			li{
+				float: left;
+				background-color: snow;
+				color: #000000;
+				padding: 5px;
+				margin-right: 2px;
+			}
+			.tabin{
+				background:#FFFFAA;
+			}
+			.contentfirst{
+				clear: both;
+				background-color: #FFFFAA;
+				color:#FF00FF;
+				width: 398px;
+				height: 100px;
+				padding: 10px;
+				display: none;
+			}
+			.content{
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="tab">
+			<li class="tabin">我是第一个选项卡</li>
+			<li>我是第二个选项卡</li>
+			<li>我是第三个选项卡</li>
+		</ul>
+		<div class="content contentfirst">
+			我是内容1
+		</div>
+		<div class="contentfirst">
+			我是内容2
+		</div>
+		<div class="contentfirst">
+			我是内容3
+		</div>
+		<script src="__HOME__js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var timer;
+			$(document).ready(function(){
+				$('li').each(function(index){
+					$(this).mouseover(function(){
+						var _this = $(this);
+						timer = setTimeout(function(){
+							$(".content").removeClass("content");
+							$(".tabin").removeClass("tabin");
+							$("div").eq(index).addClass("content");
+							_this.addClass("tabin");
+						},500);
+					}).mouseout(function(){
+						clearTimeout(timer);
+					})
+				});
+			})
+		</script>
+	</body>
+</html>
