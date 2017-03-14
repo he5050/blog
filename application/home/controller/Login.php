@@ -21,10 +21,10 @@ class Login extends Controller
     {
         //检查是否登录了
         if(session('u_id')>0 && session('u_status') == 1){
+            echo '1111111111111';
             //$this->success('登录成功,正在进入系统......',url('home/index/index'));exit;
             $url = url('home/index/index');
             header("Location:$url");
-            exit;
         }else{
             session(null);
             //显示首页
@@ -118,21 +118,17 @@ class Login extends Controller
                         unset($userinfo);
                         //$this->success('登录成功',url('home/index/index'));exit; 
                         return json(array('status'=>1,'msg'=>'成功登录！跳转到后台首页'));
-                        exit;
 
                     }else{
                         //密码不正确
                         //$this->error('用户名或密码错误'); 
                      return json(array('status'=>0,'msg'=>'用户名或密码不能空,验证码必须写!'));
-                        exit;
 
                     }
                 }else{
                     //用户名不正确
                     //$this->error('用户名或密码错误');
                     return json(array('status'=>0,'msg'=>'用户名或密码不能空,验证码必须写!'));
-                    exit;
-
                 }
             }
         }
